@@ -168,7 +168,7 @@ const AddPic = () => {
             </ListItem>
             </Box>
             <ListItem button sx={{width:"100%",border:"1px solid #132F4C",borderRadius:"10px",mb:"8px"}}> 
-              <ListItemText
+              <ListItemText  
                 primary={        <TextField 
                     fullWidth
                     id="standard-textarea"
