@@ -1,0 +1,22 @@
+.change-my-color {
+    fill: #228be4;
+    width: 50px;
+  }
+  .moreVert{
+    position: absolute;
+    right: 10px;
+    top: 19px;
+    background-color:rgba(255, 255, 255, 0.35);
+    border-radius: 50%;
+    cursor: pointer;
+    transform: scale(1.1);
+    transition: all 0.4s;
+  }
+  .moreVert:hover{
+    background-color:rgba(255, 255, 255, 0.6);
+  }
+
+  .css-dasnyc-MuiImageListItemBar-title{
+    white-space: normal !important;
+    word-wrap: break-word;
+  }

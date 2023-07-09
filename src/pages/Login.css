@@ -1,0 +1,25 @@
+.login{
+    width: 100vw;
+    height: 100vh;
+    background-image: url("../images/gifntext-gif.gif");
+    background-color: #2a2a4b;
+    background-repeat: no-repeat;
+    background-position-x: 550px;
+    background-size: contain;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.buttons{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 68px;
+    background: rgba(234 ,234, 234 ,0.4);
+    width: 360px;
+    height: 300px;
+    flex-shrink: 0;
+    position: absolute;
+    left: 10%;
+}
