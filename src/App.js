@@ -5,6 +5,7 @@ import {
 } from "react-router-dom";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
+import AdminLogin from "./pages/component/AdminLogin";
 
 function App() {
   const router = createBrowserRouter([
@@ -17,7 +18,10 @@ function App() {
       path: "/home",
       element: <Home />,
     },
-
+    {
+      path: "/admin-login",
+      element: <AdminLogin />,
+    },
     
   ]);
   return(

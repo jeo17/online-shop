@@ -2,14 +2,15 @@ import React from "react";
 import "./Login.css";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { grey, blue } from "@mui/material/colors";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SvgIcon from "@mui/material/SvgIcon";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
+  const navigate = useNavigate();
   const GoogleButton = styled(Button)(({ theme }) => ({
     color: theme.palette.getContrastText(grey[50]),
     backgroundColor: grey[50],
@@ -83,6 +84,9 @@ const Login = () => {
             variant="contained"
             href="#text-buttons"
             startIcon={<AccountCircleIcon />}
+            onClick={(eo) => {
+              navigate("./admin-login")
+            }}
           >
             Admin Sign in
           </AdminButton>

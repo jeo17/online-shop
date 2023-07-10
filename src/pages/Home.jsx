@@ -33,6 +33,10 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import ModeEditTwoToneIcon from '@mui/icons-material/ModeEditTwoTone';
 import { useTheme } from '@mui/material';
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase/config";
+
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -65,6 +69,8 @@ const imgSettings = [
 
 const Home = () => {
   const theme = useTheme();
+
+  const navigate = useNavigate();
 
   const [open, setOpen] = React.useState(false);
 
@@ -319,7 +325,21 @@ const Home = () => {
                 onClose={handleCloseUserMenu}
               >
                 {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                  <MenuItem key={setting} onClick={(eo) => {
+                    handleCloseUserMenu();
+                    if (setting === "Logout") {
+                     
+                        signOut(auth).then(() => {
+                          console.log("signout succ")
+                          navigate("/")
+                        }).catch((error) => {
+                          console.log(error)
+                        });
+                        
+                    
+        
+                    }
+                  }}>
                     <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
                 ))}
