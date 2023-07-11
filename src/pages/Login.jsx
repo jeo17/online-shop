@@ -2,6 +2,7 @@ import React from "react";
 import "./Login.css";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { grey, blue } from "@mui/material/colors";
@@ -9,7 +10,21 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SvgIcon from "@mui/material/SvgIcon";
 import { useNavigate } from "react-router-dom";
+import { useAuthState } from 'react-firebase-hooks/auth'; 
+import { useEffect } from "react";    
+import { auth, provider, provider2 } from "../firebase/config";
+import {
+  signInWithPopup,
+  FacebookAuthProvider,
+} from "firebase/auth";
+
+
+
+                  
+
+
 const Login = () => {
+  const [user, loading, error] = useAuthState(auth);
   const navigate = useNavigate();
   const GoogleButton = styled(Button)(({ theme }) => ({
     color: theme.palette.getContrastText(grey[50]),
@@ -33,14 +48,42 @@ const Login = () => {
     },
   }));
 
+
+
+  useEffect(() => {
+    if (user && !loading) {
+      navigate("/home");
+    }
+  });
+
+if (loading) {
+   <Typography variant="h3" color="initial"> please wait. this won't take long</Typography>
+
+}
+
+if (!user && !loading) {
   return (
     <Box className="login">
       <Box className="buttons">
         <Stack spacing={4} direction="column">
           <GoogleButton
+            onClick={(eo) => {
+              signInWithPopup(auth, provider)
+                .then((result) => {
+                  const user = result.user;
+
+                  navigate("/home");
+                  console.log(user);
+                })
+                .catch((error) => {
+                  // Handle Errors here.
+                  const errorCode = error.code;
+                  console.log(errorCode);
+                });
+            }}
             size="large"
             variant="contained"
-            sx={{ color: "#545454" ,borderRadius:"8px"}}
+            sx={{ color: "#545454", borderRadius: "8px" }}
           >
             <SvgIcon sx={{ marginRight: "8px" }}>
               <svg
@@ -70,7 +113,34 @@ const Login = () => {
             Sign in with google
           </GoogleButton>
           <FacebookButton
-          sx={{borderRadius:"8px"}}
+            onClick={(eo) => {
+              signInWithPopup(auth, provider2)
+  .then((result) => {
+    // The signed-in user info.
+    const user = result.user;
+
+    // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+    const credential = FacebookAuthProvider.credentialFromResult(result);
+    const accessToken = credential.accessToken;
+
+   console.log(user)
+   navigate("/home")
+  })
+  .catch((error) => {
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // The email of the user's account used.
+    const email = error.customData.email;
+    // The AuthCredential type that was used.
+    const credential = FacebookAuthProvider.credentialFromError(error);
+
+    console.log(errorCode)
+
+    // ...
+  });
+            }}
+            sx={{ borderRadius: "8px" }}
             size="large"
             variant="contained"
             href="#text-buttons"
@@ -79,13 +149,13 @@ const Login = () => {
             Sign in with facebook
           </FacebookButton>
           <AdminButton
-            sx={{borderRadius:"8px"}}
+            sx={{ borderRadius: "8px" }}
             size="large"
             variant="contained"
             href="#text-buttons"
             startIcon={<AccountCircleIcon />}
             onClick={(eo) => {
-              navigate("./admin-login")
+              navigate("./admin-login");
             }}
           >
             Admin Sign in
@@ -94,6 +164,8 @@ const Login = () => {
       </Box>
     </Box>
   );
+}
+
 };
 
 export default Login;
