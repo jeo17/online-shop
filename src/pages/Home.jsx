@@ -683,7 +683,7 @@ const Home = () => {
                     open={Boolean(anchorElUser)}
                     onClose={handleCloseUserMenu}
                   >
-                    {settings2.map((setting) => (
+                    {settings2.map((setting) => (  
                       <MenuItem
                         key={setting}
                         onClick={(eo) => {
