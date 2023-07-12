@@ -40,6 +40,11 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import LogoutIcon from '@mui/icons-material/Logout';
+import BookmarksIcon from '@mui/icons-material/Bookmarks';
+
 const pages = [
   {
     Name: "Home",
@@ -52,8 +57,30 @@ const pages = [
     startIcon: "",
   },
 ];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
-const settings2 = ["Saved", "Logout"];
+const settings = [
+  {
+    Name: "Account",
+    icon: <AccountCircleIcon />,
+  },
+  {
+    Name: "Dashboard",
+    icon: <DashboardIcon />,
+  },
+  {
+    Name: "Logout",
+    icon: <LogoutIcon />,
+  },
+];
+const settings2 = [
+  {
+    Name: "Saved",
+    icon: <BookmarksIcon />,
+  },
+  {
+    Name: "Logout",
+    icon: <LogoutIcon />,
+  },
+];
 const imgSettings = [
   {
     Name: "Edit",
@@ -336,10 +363,11 @@ const Home = () => {
                   >
                     {settings.map((setting) => (
                       <MenuItem
-                        key={setting}
+                        sx={{display:"flex",justifyContent:"space-between"}}
+                        key={setting.Name}
                         onClick={(eo) => {
                           handleCloseUserMenu();
-                          if (setting === "Logout") {
+                          if (setting.Name === "Logout") {
                             signOut(auth)
                               .then(() => {
                                 console.log("signout succ");
@@ -351,7 +379,10 @@ const Home = () => {
                           }
                         }}
                       >
-                        <Typography textAlign="center">{setting}</Typography>
+                        <Typography textAlign="center">{setting.Name}</Typography>
+                        <IconButton sx={{"&:hover":{backgroundColor:"transparent"}}}>
+                             {setting.icon}
+                        </IconButton>
                       </MenuItem>
                     ))}
                   </Menu>
@@ -685,10 +716,11 @@ const Home = () => {
                   >
                     {settings2.map((setting) => (  
                       <MenuItem
-                        key={setting}
+                      sx={{display:"flex",justifyContent:"space-between"}}
+                        key={setting.Name}
                         onClick={(eo) => {
                           handleCloseUserMenu();
-                          if (setting === "Logout") {
+                          if (setting.Name === "Logout") {
                             signOut(auth)
                               .then(() => {
                                 console.log("signout succ");
@@ -700,7 +732,10 @@ const Home = () => {
                           }
                         }}
                       >
-                        <Typography textAlign="center">{setting}</Typography>
+                        <Typography textAlign="center">{setting.Name}</Typography>
+                        <IconButton sx={{"&:hover":{backgroundColor:"transparent"}}}>
+                             {setting.icon}
+                        </IconButton>
                       </MenuItem>
                     ))}
                   </Menu>
