@@ -18,6 +18,7 @@ import Box from "@mui/material/Box";
 import InputAdornment from '@mui/material/InputAdornment';
 import MuiGrid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
+import { useState } from 'react';
 
 
 
@@ -61,6 +62,19 @@ const addImgHandler = () => {
   return;
 };
 
+// check inputs if they are empty
+
+
+
+const isEmpty = (eo) => {
+  if (eo.target.value === undefined || eo.target.value ==="") {
+    return true
+  }
+  else{
+    return false
+  }
+}
+
 
  /*   submitig the images 
  
@@ -81,6 +95,9 @@ document
 
 const AddPic = () => {
 
+  const [EmptyTitle, setEmptyTitle] = useState(true);
+  const [EmptyPrice, setEmptyPrice] = useState(true);
+  const [EmptySpc, setEmptySpc] = useState(true);
 
     const [open, setOpen] = React.useState(false);
 
@@ -125,7 +142,12 @@ const AddPic = () => {
               <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                 New Product
               </Typography>
-              <Button autoFocus color="inherit" onClick={handleClose}>
+              <Button autoFocus color="inherit" onClick={(eo) => {
+                handleClose();
+                setEmptyPrice(true);
+                setEmptyTitle(true);
+                setEmptySpc(true);
+              }} disabled={EmptyPrice === false && EmptyTitle === false && EmptySpc === false ? false :true}>
                 save
               </Button>
             </Toolbar>
@@ -139,6 +161,9 @@ const AddPic = () => {
             <ListItem button sx={{width:"60%",border:"1px solid #132F4C",borderRadius:"10px",mr:"2%"}}> 
               <ListItemText
                 primary={        <TextField 
+                  onChange={(eo) => {
+                    setEmptyTitle(isEmpty(eo));
+                  }}
                     fullWidth
                     id="standard-textarea"
                     label="Name of the product"
@@ -154,6 +179,9 @@ const AddPic = () => {
               <ListItemText
                 primary={        
                 <TextField 
+                onChange={(eo) => {
+                  setEmptyPrice(isEmpty(eo));
+                }}
                     fullWidth
                     id="standard-textarea"
                     label="Price"
@@ -170,6 +198,9 @@ const AddPic = () => {
             <ListItem button sx={{width:"100%",border:"1px solid #132F4C",borderRadius:"10px",mb:"8px"}}> 
               <ListItemText  
                 primary={        <TextField 
+                  onChange={(eo) => {
+                    setEmptySpc(isEmpty(eo));
+                  }}
                     fullWidth
                     id="standard-textarea"
                     label="Specifications :"
