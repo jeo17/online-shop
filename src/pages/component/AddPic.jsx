@@ -19,6 +19,9 @@ import InputAdornment from '@mui/material/InputAdornment';
 import MuiGrid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
 import { useState } from 'react';
+import { doc, setDoc } from "firebase/firestore"; 
+import { db,storage } from '../../firebase/config';
+import { ref, uploadBytes } from "firebase/storage";
 
 
 
@@ -62,9 +65,7 @@ const addImgHandler = () => {
   return;
 };
 
-// check inputs if they are empty
-
-
+// check inputs if they are empty function
 
 const isEmpty = (eo) => {
   if (eo.target.value === undefined || eo.target.value ==="") {
@@ -74,6 +75,12 @@ const isEmpty = (eo) => {
     return false
   }
 }
+//to store imgs
+
+
+
+
+
 
 
  /*   submitig the images 
@@ -98,6 +105,10 @@ const AddPic = () => {
   const [EmptyTitle, setEmptyTitle] = useState(true);
   const [EmptyPrice, setEmptyPrice] = useState(true);
   const [EmptySpc, setEmptySpc] = useState(true);
+  const [title, settitle] = useState(null);
+  const [price, setprice] = useState(null);
+  const [spc, setspc] = useState(null);
+  let [img, setimg] = useState(null);
 
     const [open, setOpen] = React.useState(false);
 
@@ -142,11 +153,35 @@ const AddPic = () => {
               <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                 New Product
               </Typography>
-              <Button autoFocus color="inherit" onClick={(eo) => {
+              <Button autoFocus color="inherit" onClick={async (eo) => {
+
+                
+                  let id = Date.now();
+
+                   await setDoc(doc(db, "Products" , `${id}`), {
+                          Name: title,
+                          Price: price,
+                          Details: spc,
+                          img_id: id,
+                          })
+
+                 console.log("done")
+
+                 const imageref = ref(storage, `/Products/${title}/${id}/1`);
+
+                 await uploadBytes(imageref, img)
+                 .then(() => {
+                   console.log("“image save successfully”")
+                     })
+                 .catch((error) => {
+                   console.log(error.message);
+                 });
+
                 handleClose();
                 setEmptyPrice(true);
                 setEmptyTitle(true);
                 setEmptySpc(true);
+                setimg(null)
               }} disabled={EmptyPrice === false && EmptyTitle === false && EmptySpc === false ? false :true}>
                 save
               </Button>
@@ -163,6 +198,7 @@ const AddPic = () => {
                 primary={        <TextField 
                   onChange={(eo) => {
                     setEmptyTitle(isEmpty(eo));
+                    settitle(eo.target.value)
                   }}
                     fullWidth
                     id="standard-textarea"
@@ -181,6 +217,8 @@ const AddPic = () => {
                 <TextField 
                 onChange={(eo) => {
                   setEmptyPrice(isEmpty(eo));
+                  setprice(eo.target.value)
+
                 }}
                     fullWidth
                     id="standard-textarea"
@@ -200,6 +238,8 @@ const AddPic = () => {
                 primary={        <TextField 
                   onChange={(eo) => {
                     setEmptySpc(isEmpty(eo));
+                    setspc(eo.target.value)
+
                   }}
                     fullWidth
                     id="standard-textarea"
@@ -226,10 +266,14 @@ const AddPic = () => {
       +
     </label>
     <input type="file" id="add-single-img" accept="image/jpeg" onChange={(eo) => {
+      setimg(eo.target.files[0])
       addImgHandler()
     }}/>
   </div>
   <input
+  onChange={(eo) => {
+    
+  }}
     type="file"
     id="image-input"
     name="photos"

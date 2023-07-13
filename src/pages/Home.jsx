@@ -44,6 +44,16 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import LogoutIcon from '@mui/icons-material/Logout';
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
+import { useCollection } from "react-firebase-hooks/firestore";
+ import { collection, orderBy, query, limit  } from "firebase/firestore";
+ import { db } from "../firebase/config";
+ import { ref, getDownloadURL } from "firebase/storage";
+ import { storage } from "../firebase/config";
+
+
+
+
+
 
 const pages = [
   {
@@ -95,7 +105,15 @@ const imgSettings = [
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 const Home = () => {
-  const [user, loading] = useAuthState(auth);
+
+  const [value, loading ] =   useCollection(
+    query(collection(db, "Products"), orderBy("img_id"))
+  );
+
+  
+
+  
+  const [user, loadingg] = useAuthState(auth);
 
   const theme = useTheme();
 
@@ -139,9 +157,36 @@ const Home = () => {
     console.log("was heree");
   }
 
+
+
+if (value) {
+ 
+  value.docs.map( (item) => (
+    
+     getDownloadURL(ref(storage, `/Products/${item.data().Name}/${item.data().img_id}/1`))
+     .then((url) => {
+       if (itemData.includes(url) === false) {
+         itemData.push(url)
+       }
+       
+     })
+     .catch((error) => {
+       console.log(error.message);
+     })
+     
+   ))
+   
+}
+
+
+
+
   if (user) {
     if (user.uid === "1z7kIqBfyah5oLIh6KxXNtpMSrw2") {
-      return (
+      if (value) {
+       
+        
+           return (
         <div>
           <AppBar position="static">
             <Container maxWidth="xl">
@@ -404,8 +449,8 @@ const Home = () => {
               gap: "6px !important",
             }}
           >
-            {itemData.map((item, index) => (
-              <ImageListItem key={item.img} sx={{ height: "480px !important" }}>
+            {value.docs.map((item, index) => (
+              <ImageListItem key={item.data().Details} sx={{ height: "480px !important" }}>
                 <IconButton onClick={handleOpenMenu} sx={{ p: 0 }}>
                   <MoreVertIcon className="moreVert" />
                 </IconButton>
@@ -446,15 +491,15 @@ const Home = () => {
                 </Menu>
 
                 <img
-                  src={`${item.img}?w=248&fit=crop&auto=format`}
+                  src={`${itemData[index]}?w=248&fit=crop&auto=format`}
                   srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                  alt={item.title}
+                  alt={item.data().Name}
                   loading="lazy"
                 />
                 <ImageListItemBar
                   id={`1-img-bar-${index}`}
-                  title={item.title}
-                  subtitle={item.author}
+                  title={item.data().Name}
+                  subtitle={item.data().Price}
                   actionIcon={
                     <IconButton
                       onClick={(eo) => {
@@ -476,7 +521,7 @@ const Home = () => {
                 <ImageListItemBar
                   id={`2-img-bar-${index}`}
                   sx={{ display: "none" }}
-                  title={item.info}
+                  title={item.data().Details}
                   actionIcon={
                     <IconButton
                       onClick={(eo) => {
@@ -499,6 +544,8 @@ const Home = () => {
           </ImageList>
         </div>
       );
+      }
+
     } else {
       return (
         <div>
@@ -825,92 +872,6 @@ const Home = () => {
     }
   }
 };
-
-const itemData = [
-  {
-    img: "https://microless.com/cdn/products/953a385778a4218a589079c9422cd85d-md.jpg",
-    title: "xbox-360",
-    author: "@bkristastucchio",
-    info: "etat: 10/10 --  avec 5 cd -- maglitch w maflachi",
-    id: "1",
-  },
-  {
-    img: "https://cdn7.ouedkniss.com/1600/medias/announcements/images/kZ5mx/tlpxsaTe09mQkQH1yAfUF8gSaAodGWNjsbP5Fgmp.jpg",
-    title: "pc portable",
-    author: "@rollelflex_graphy726",
-    info: "aaaaaa aaaaaaaaa aaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-    id: "2",
-  },
-  {
-    img: "https://cdn9.ouedkniss.com/350/medias/announcements/images/kZ5mx/W7zMWJeYpgjN8px5iyRyoRImDeBbsJBPQTX7NO2V.jpg",
-    title: "Camera",
-    author: "@helloimnik",
-    info: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-    id: "3",
-  },
-  {
-    img: "https://cdn9.ouedkniss.com/1600/medias/announcements/images/lXj1/uFf90bjri8WdwkE7UBzTUz7Z7S6QNqK7DTguJmLZ.jpg",
-    title: "xbox",
-    author: "@nolanissac",
-    info: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-    id: "4",
-  },
-  {
-    img: "https://cdn9.ouedkniss.com/1600/medias/announcements/images/482RLx/I2ibgsKqCHkY2H2H1Nwe4yUXHkxheGHkAobac5B0.jpg",
-    title: "play 4",
-    author: "@hjrc33",
-    info: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-    id: "5",
-  },
-  {
-    img: "https://media.gqmagazine.fr/photos/5b990b9dd9e1220011b8986e/16:9/w_2560%2Cc_limit/la_playstation_5_pourrait_bien___tre_une_console_portable_780.jpeg",
-    title: "PSP",
-    author: "@arwinneil",
-    info: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-    id: "6",
-  },
-  {
-    img: "https://cdn9.ouedkniss.com/350/medias/announcements/images/31VyNn/4z6e62WXvzMvuSJ2TGDAItj4VVKq6DOgI6a124qb.jpg",
-    title: "Basketball",
-    author: "@tjdragotta",
-    info: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-    id: "7",
-  },
-  {
-    img: "https://cdn8.ouedkniss.com/1600/medias/announcements/images/XDoNlA/9MkVcHW9sk4eHsjo4LEuPlxOecVEpJpPi4IN6B4f.jpg",
-    title: "Fern",
-    author: "@katie_wasserman",
-    info: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-    id: "8",
-  },
-  {
-    img: "https://cdn9.ouedkniss.com/350/medias/announcements/images/Z4oQmJ/SmQi38Cy7yU5mvg6W56FuK4pYsCGZCPIZuUtsxDR.jpg",
-    title: "Mushrooms",
-    author: "@silverdalex",
-    info: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-    id: "9",
-  },
-  {
-    img: "https://cdn8.ouedkniss.com/1600/medias/announcements/images/w5oJ/lPsygiFnSMLPh8HXzolhH2EWKHummZPCtAz6FWz4.jpg",
-    title: "Tomato basil",
-    author: "@shelleypauls",
-    info: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-    id: "10",
-  },
-  {
-    img: "https://5.imimg.com/data5/SELLER/Default/2022/7/PW/XR/HQ/146620043/xbox-360-video-game-console-1000x1000.jpg",
-    title: "Sea star",
-    author: "@peterlaster",
-    info: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-    id: "11",
-  },
-  {
-    img: "https://cdn8.ouedkniss.com/1600/medias/announcements/images/Vnm19/PWmCMUHgkZ684oJ77UZEDUQjMwFDBZ19iLwEXsPD.jpg",
-    title: "Bike",
-    author: "@southside_customs",
-    info: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-    id: "12",
-  },
-];
-
+const itemData = [];
+console.log(itemData)
 export default Home;
