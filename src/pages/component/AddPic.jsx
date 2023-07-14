@@ -193,7 +193,7 @@ const AddPic = () => {
           <List sx={{margin:"revert"}}>
 
             <Box sx={{display:"flex",mb:"5%"}}>
-            <ListItem button sx={{width:"60%",border:"1px solid #132F4C",borderRadius:"10px",mr:"2%"}}> 
+            <ListItem  sx={{width:"60%",border:"1px solid #132F4C",borderRadius:"10px",mr:"2%"}}> 
               <ListItemText
                 primary={        <TextField 
                   onChange={(eo) => {
@@ -211,7 +211,7 @@ const AddPic = () => {
             </ListItem>
 
 
-            <ListItem button sx={{width:"60%",border:"1px solid #132F4C",borderRadius:"10px"}}> 
+            <ListItem  sx={{width:"60%",border:"1px solid #132F4C",borderRadius:"10px"}}> 
               <ListItemText
                 primary={        
                 <TextField 
@@ -233,7 +233,7 @@ const AddPic = () => {
               />
             </ListItem>
             </Box>
-            <ListItem button sx={{width:"100%",border:"1px solid #132F4C",borderRadius:"10px",mb:"8px"}}> 
+            <ListItem  sx={{width:"100%",border:"1px solid #132F4C",borderRadius:"10px",mb:"8px"}}> 
               <ListItemText  
                 primary={        <TextField 
                   onChange={(eo) => {

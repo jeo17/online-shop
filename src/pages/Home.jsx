@@ -45,7 +45,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import LogoutIcon from '@mui/icons-material/Logout';
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import { useCollection } from "react-firebase-hooks/firestore";
- import { collection, orderBy, query, limit  } from "firebase/firestore";
+ import { collection, orderBy, query  } from "firebase/firestore";
  import { db } from "../firebase/config";
  import { ref, getDownloadURL } from "firebase/storage";
  import { storage } from "../firebase/config";
@@ -107,7 +107,7 @@ const label = { inputProps: { "aria-label": "Checkbox demo" } };
 const Home = () => {
 
   const [value, loading ] =   useCollection(
-    query(collection(db, "Products"), orderBy("img_id"))
+    query(collection(db, "Products"), orderBy("img_id","desc"))
   );
 
   
@@ -146,15 +146,23 @@ const Home = () => {
     setanchorEl(null);
   };
 
+  function objectExistsInArray(array, object) {
+    for (var i = 0; i < array.length; i++) {
+      if (JSON.stringify(array[i]) === JSON.stringify(object)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   useEffect(() => {
     if (!user && !loading) {
       navigate("/");
     }
-  });
+  },);
 
   if (loading) {
     <Typography variant="h3"> please wait. this won't take long</Typography>;
-    console.log("was heree");
   }
 
 
@@ -165,8 +173,14 @@ if (value) {
     
      getDownloadURL(ref(storage, `/Products/${item.data().Name}/${item.data().img_id}/1`))
      .then((url) => {
-       if (itemData.includes(url) === false) {
-         itemData.push(url)
+
+      var myObject = {
+        url: url,
+        id: item.data().img_id
+      };
+
+       if (objectExistsInArray(itemData,myObject) === false) {
+        itemData = itemData.concat(myObject)
        }
        
      })
@@ -179,6 +193,19 @@ if (value) {
 }
 
 
+
+
+
+
+if (value) {
+  itemData.sort(function(a, b) {
+    return b.id - a.id;
+  });
+if (itemData.length !== 0) {
+  console.log(itemData[1].url)
+}
+
+}
 
 
   if (user) {
@@ -491,7 +518,8 @@ if (value) {
                 </Menu>
 
                 <img
-                  src={`${itemData[index]}?w=248&fit=crop&auto=format`}
+                  src={
+                  itemData[index]!==undefined ? `${itemData[index].url}?w=248&fit=crop&auto=format` :null }
                   srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
                   alt={item.data().Name}
                   loading="lazy"
@@ -870,8 +898,10 @@ if (value) {
         </div>
       );
     }
+
   }
+
 };
-const itemData = [];
-console.log(itemData)
+let itemData = [];
+
 export default Home;
