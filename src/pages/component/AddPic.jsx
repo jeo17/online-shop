@@ -22,7 +22,7 @@ import { useState } from 'react';
 import { doc, setDoc } from "firebase/firestore"; 
 import { db,storage } from '../../firebase/config';
 import { ref, uploadBytes } from "firebase/storage";
-
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -75,7 +75,7 @@ const isEmpty = (eo) => {
     return false
   }
 }
-//to store imgs
+
 
 
 
@@ -109,6 +109,7 @@ const AddPic = () => {
   const [price, setprice] = useState(null);
   const [spc, setspc] = useState(null);
   let [img, setimg] = useState(null);
+  const [save, setsave] = useState("Save");
 
     const [open, setOpen] = React.useState(false);
 
@@ -119,7 +120,6 @@ const AddPic = () => {
     const handleClose = () => {
       setOpen(false);
     };
-  
 
     return (
         <div>
@@ -155,7 +155,8 @@ const AddPic = () => {
               </Typography>
               <Button autoFocus color="inherit" onClick={async (eo) => {
 
-                
+                setsave(<CircularProgress color="inherit" sx={{scale:"0.8"}}/>)
+
                   let id = Date.now();
 
                    await setDoc(doc(db, "Products" , `${id}`), {
@@ -176,14 +177,15 @@ const AddPic = () => {
                  .catch((error) => {
                    console.log(error.message);
                  });
-
+               
                 handleClose();
                 setEmptyPrice(true);
                 setEmptyTitle(true);
                 setEmptySpc(true);
-                setimg(null)
+                setimg(null);
+                window.location.reload()
               }} disabled={EmptyPrice === false && EmptyTitle === false && EmptySpc === false ? false :true}>
-                save
+                {save}
               </Button>
             </Toolbar>
           </AppBar>

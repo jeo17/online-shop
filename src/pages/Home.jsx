@@ -37,7 +37,7 @@ import { useTheme } from "@mui/material";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase/config";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -49,6 +49,7 @@ import { useCollection } from "react-firebase-hooks/firestore";
  import { db } from "../firebase/config";
  import { ref, getDownloadURL } from "firebase/storage";
  import { storage } from "../firebase/config";
+ import Skeleton from '@mui/material/Skeleton';
 
 
 
@@ -111,7 +112,7 @@ const Home = () => {
   );
 
   
-
+  const [read, setread] = useState(false);
   
   const [user, loadingg] = useAuthState(auth);
 
@@ -145,6 +146,11 @@ const Home = () => {
   const handleCloseMenu = () => {
     setanchorEl(null);
   };
+
+
+setTimeout(() => {
+  setread(true)
+}, 2300);
 
   function objectExistsInArray(array, object) {
     for (var i = 0; i < array.length; i++) {
@@ -468,6 +474,7 @@ if (itemData.length !== 0) {
               width: "100%",
               height: "100%",
               overflowX: "hidden",
+              overflowY: "hidden",
               gridTemplateColumns: {
                 xs: "repeat(2, 1fr) !important",
                 sm: "repeat(3, 1fr) !important",
@@ -516,14 +523,18 @@ if (itemData.length !== 0) {
                     </MenuItem>
                   ))}
                 </Menu>
-
+                {read === false ? 
+                  <Skeleton sx={{ height: "100%" }} animation="wave" variant="rectangular" />:
+                  
                 <img
-                  src={
-                  itemData[index]!==undefined ? `${itemData[index].url}?w=248&fit=crop&auto=format` :null }
-                  srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                  alt={item.data().Name}
-                  loading="lazy"
-                />
+                src={
+                itemData[index]!==undefined ? `${itemData[index].url}?w=248&fit=crop&auto=format` :null }
+                srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                alt={item.data().Name}
+                loading="lazy"
+              />
+                }
+
                 <ImageListItemBar
                   id={`1-img-bar-${index}`}
                   title={item.data().Name}
@@ -570,12 +581,14 @@ if (itemData.length !== 0) {
               </ImageListItem>
             ))}
           </ImageList>
+
         </div>
       );
       }
 
     } else {
-      return (
+      if (value) {
+            return (
         <div>
           <AppBar position="static">
             <Container maxWidth="xl">
@@ -824,6 +837,7 @@ if (itemData.length !== 0) {
               width: "100%",
               height: "100%",
               overflowX: "hidden",
+              overflowY: "hidden",
               gridTemplateColumns: {
                 xs: "repeat(2, 1fr) !important",
                 sm: "repeat(3, 1fr) !important",
@@ -832,8 +846,8 @@ if (itemData.length !== 0) {
               gap: "6px !important",
             }}
           >
-            {itemData.map((item, index) => (
-              <ImageListItem key={item.img} sx={{ height: "480px !important" }}>
+            {value.docs.map((item, index) => (
+              <ImageListItem key={item.data().Details} sx={{ height: "480px !important" }}>
                 <Checkbox 
                 sx={{position:"absolute",right:"8px",top:"10px",transform:"scale(1.1)",backgroundColor:"rgba(255, 255, 255, 0.35)",  "&:hover": {
                   backgroundColor: "rgba(255, 255, 255, 0.45)",
@@ -842,17 +856,21 @@ if (itemData.length !== 0) {
                   icon={<BookmarkBorderIcon />}
                   checkedIcon={<BookmarkIcon />}
                 />
-
+                {read === false ? 
+                  <Skeleton sx={{ height: "100%" }} animation="wave" variant="rectangular" />:
+                  
                 <img
-                  src={`${item.img}?w=248&fit=crop&auto=format`}
-                  srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                  alt={item.title}
-                  loading="lazy"
-                />
+                src={
+                itemData[index]!==undefined ? `${itemData[index].url}?w=248&fit=crop&auto=format` :null }
+                srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                alt={item.data().Name}
+                loading="lazy"
+              />
+                }
                 <ImageListItemBar
                   id={`1-img-bar-${index}`}
-                  title={item.title}
-                  subtitle={item.author}
+                  title={item.data().Name}
+                  subtitle={item.data().Price}
                   actionIcon={
                     <IconButton
                       onClick={(eo) => {
@@ -874,7 +892,7 @@ if (itemData.length !== 0) {
                 <ImageListItemBar
                   id={`2-img-bar-${index}`}
                   sx={{ display: "none" }}
-                  title={item.info}
+                  title={item.data().Details}
                   actionIcon={
                     <IconButton
                       onClick={(eo) => {
@@ -896,7 +914,9 @@ if (itemData.length !== 0) {
             ))}
           </ImageList>
         </div>
-      );
+      );  
+      }
+
     }
 
   }

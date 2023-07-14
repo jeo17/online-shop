@@ -20,3 +20,6 @@
     white-space: normal !important;
     word-wrap: break-word;
   }
+  .css-16iisoq-MuiImageListItem-root .MuiImageListItem-img{
+    height: 100% !important;
+  }
