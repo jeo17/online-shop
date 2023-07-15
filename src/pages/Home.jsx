@@ -46,9 +46,9 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import { useCollection } from "react-firebase-hooks/firestore";
  import { collection, orderBy, query  } from "firebase/firestore";
- import { db } from "../firebase/config";
- import { ref, getDownloadURL } from "firebase/storage";
- import { storage } from "../firebase/config";
+ import { db,storage } from "../firebase/config";
+ import { ref, getDownloadURL,deleteObject } from "firebase/storage";
+ import { doc, deleteDoc } from "firebase/firestore";
  import Skeleton from '@mui/material/Skeleton';
 
 
@@ -113,6 +113,9 @@ const Home = () => {
 
   
   const [read, setread] = useState(false);
+
+  const [trashID, settrashID] = useState(null);
+  const [trashName, settrashName] = useState(null);
   
   const [user, loadingg] = useAuthState(auth);
 
@@ -150,7 +153,20 @@ const Home = () => {
 
 setTimeout(() => {
   setread(true)
-}, 2300);
+}, 2500);
+
+
+// Function to delete an element by key
+function deleteElementByKey(array, key, value) {
+  const index = array.findIndex(element => element[key] === value);
+  if (index !== -1) {
+    array.splice(index, 1);
+    console.log('Element deleted successfully.');
+  } else {
+    console.log('Element not found.');
+  }
+}
+
 
   function objectExistsInArray(array, object) {
     for (var i = 0; i < array.length; i++) {
@@ -207,10 +223,6 @@ if (value) {
   itemData.sort(function(a, b) {
     return b.id - a.id;
   });
-if (itemData.length !== 0) {
-  console.log(itemData[1].url)
-}
-
 }
 
 
@@ -484,9 +496,14 @@ if (itemData.length !== 0) {
             }}
           >
             {value.docs.map((item, index) => (
-              <ImageListItem key={item.data().Details} sx={{ height: "480px !important" }}>
+              <ImageListItem key={item.data().img_id}  sx={{ height: "480px !important" }}>
                 <IconButton onClick={handleOpenMenu} sx={{ p: 0 }}>
-                  <MoreVertIcon className="moreVert" />
+                  <Box  className="moreVert" id={item.data().img_id} data-name={item.data().Name} 
+                  onClick={(eo) => {
+                    settrashID(eo.target.id)
+                    settrashName(eo.target.getAttribute("data-name"))
+
+                  }} ></Box>
                 </IconButton>
 
                 <Menu
@@ -506,7 +523,48 @@ if (itemData.length !== 0) {
                   onClose={handleCloseMenu}
                 >
                   {imgSettings.map((setting) => (
-                    <MenuItem key={setting} onClick={handleCloseMenu}>
+                    <MenuItem key={setting.Name} onClick={async (eo) => {
+                      handleCloseMenu();
+                      if (setting.Name === "Delete") {
+                        const pictureRef = ref(storage, `/Products/${trashName}/${trashID}/1`);
+                    
+                         
+                        let trashIDnumber = Number(trashID)
+                        
+
+                   
+
+
+                         
+
+
+                        await deleteDoc(doc(db,"Products", trashID));
+                        
+                        console.log("first done")
+
+                        setread(!read)
+
+                        
+
+                        await deleteObject(pictureRef)
+                        .then(() => {
+                          
+                          console.log('Picture deleted successfully');
+                          deleteElementByKey(itemData, 'id', trashIDnumber);                  
+                          setTimeout(() => {
+                            setread(!read)
+                          }, 2500);
+                          itemData.sort(function(a, b) {
+                            return b.id - a.id;
+                          })
+                        })
+                        .catch((error) => {
+                          // An error occurred while deleting the picture
+                          console.error('Error deleting picture:', error);
+                        });
+                      }
+                      
+                    }}>
                       <Typography
                         textAlign="center"
                         sx={{
@@ -516,7 +574,7 @@ if (itemData.length !== 0) {
                             setting.Name === "Delete"
                               ? `${theme.palette.error.main}`
                               : "none",
-                        }}
+                        }} 
                       >
                         {setting.icon} &nbsp; {setting.Name}
                       </Typography>

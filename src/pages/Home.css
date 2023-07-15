@@ -9,13 +9,24 @@
     background-color:rgba(255, 255, 255, 0.35);
     border-radius: 50%;
     cursor: pointer;
-    transform: scale(1.1);
     transition: all 0.4s;
+    width: 30px;
+    height: 30px;
+    color: #2a2a2a;
+    display: flex;
+    justify-content: center;
   }
   .moreVert:hover{
     background-color:rgba(255, 255, 255, 0.6);
   }
-
+  .moreVert:after{
+    content: '\2807';
+    font-size: 25px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    left: 3px;
+  }
   .css-dasnyc-MuiImageListItemBar-title{
     white-space: normal !important;
     word-wrap: break-word;
