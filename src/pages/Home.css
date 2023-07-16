@@ -34,3 +34,116 @@
   .css-16iisoq-MuiImageListItem-root .MuiImageListItem-img{
     height: 100% !important;
   }
+
+/****  CONTACT US DIALOG  ****/
+.contact-us ul {
+  position:relative;
+  margin:0;
+  padding-bottom:15px;
+  display:flex;
+}
+.contact-us ul li {
+  list-style:none;
+}
+.contact-us ul li a {
+  display:block;
+  position:relative;
+  width:100px;
+  height:100px;
+  line-height:94px;
+  font-size:40px;
+  text-align:center;
+  text-decoration:none;
+  color:#404040;
+  margin: 0 30px;
+  transition:.5s;
+}
+.contact-us ul li a span {
+  position:absolute;
+  transition: transform .5s;
+}
+.contact-us ul li a span:nth-child(1),
+.contact-us ul li a span:nth-child(3){
+  width:100%;
+  height:3px;
+  background:#404040;
+}
+.contact-us ul li a span:nth-child(1) {
+  top:0;
+  left:0;
+  transform-origin: right;
+}
+.contact-us ul li a:hover span:nth-child(1) {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition:transform .5s;
+}
+
+.contact-us ul li a span:nth-child(3) {
+  bottom:0;
+  left:0;
+  transform-origin: left;
+}
+.contact-us ul li a:hover span:nth-child(3) {
+  transform: scaleX(0);
+  transform-origin: right;
+  transition:transform .5s;
+}
+
+.contact-us ul li a span:nth-child(2),
+.contact-us ul li a span:nth-child(4){
+  width:3px;
+  height:100%;
+  background:#404040;
+}
+.contact-us ul li a span:nth-child(2) {
+  top:0;
+  left:0;
+  transform:scale(0);
+  transform-origin: bottom;
+}
+.contact-us ul li a:hover span:nth-child(2) {
+  transform: scale(1);
+  transform-origin: top;
+  transition:transform .5s;
+}
+.contact-us ul li a span:nth-child(4) {
+  top:0;
+  right:0;
+  transform:scale(0);
+  transform-origin: top;
+}
+.contact-us ul li a:hover span:nth-child(4) {
+  transform: scale(1);
+  transform-origin: bottom;
+  transition:transform .5s;
+}
+
+.contact-us .facebook:hover {
+  color: #3b5998;
+}
+.contact-us .facebook:hover span { 
+  background: #3b5998;
+}
+.contact-us .phone:hover {
+  color: #1baf09;
+}
+.contact-us .phone:hover span { 
+  background: #1baf09;
+}
+
+.contact-us .instagram:hover {
+  color: #e42d62;
+}
+.contact-us .instagram:hover span { 
+  background:linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d);
+}
+.contact-us ul li a .phone {
+  color: #1baf09;
+}
+.contact-us ul li a:hover:nth-child(3) {
+  color: #c32aa3;
+}
+.contact-us ul li a:hover:nth-child(4) {
+  color: #dd4b39;
+}
