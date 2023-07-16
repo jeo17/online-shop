@@ -140,7 +140,7 @@ const AddPic = () => {
           onClose={handleClose}
           TransitionComponent={Transition}
         >
-          <AppBar sx={{ position: 'relative' }}>
+          <AppBar sx={{ position: 'relative',width:{xs:"100vw",sm:"inherit"}}}>
             <Toolbar>
               <IconButton
                 edge="start"
@@ -189,8 +189,8 @@ const AddPic = () => {
               </Button>
             </Toolbar>
           </AppBar>
-          <Grid container className='addPic'>
-          <Grid item xs  sx={{display:"flex",flexDirection:"column",alignItems:"center"}}>
+          <Grid container className='addPic' sx={{flexDirection:{xs:"column",sm:"row"}}}>
+          <Grid item xs  sx={{display:"flex",flexDirection:"column",alignItems:"center",width:{xs:"90vw",sm:"inherit"}}}>
           <Typography variant="h6" mt={2} >Add info</Typography>
           <List sx={{margin:"revert"}}>
 
@@ -255,7 +255,7 @@ const AddPic = () => {
           </List>
           </Grid>
           <Divider orientation="vertical" flexItem></Divider>
-          <Grid item xs>
+          <Grid item xs sx={{width:{xs:"90vw",sm:"inherit"}}}>
 
 
 

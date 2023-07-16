@@ -63,8 +63,12 @@ if (loading) {
 
 if (!user && !loading) {
   return (
-    <Box className="login">
-      <Box className="buttons">
+    <Box className="login" sx={{backgroundPositionX:{ 
+                                 xs: "unset",
+                                 md: "550px",
+    }}}>
+      <Box className="buttons"  sx={{left:{xs: "unset", md: "10%",}, transform:{xs: "scale(0.7)", sm: "scale(1)",}, marginBottom:{xs: "12vw", sm: "unset",}
+                                 }}>
         <Stack spacing={4} direction="column">
           <GoogleButton
             onClick={(eo) => {

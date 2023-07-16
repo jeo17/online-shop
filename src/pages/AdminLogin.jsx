@@ -33,9 +33,8 @@ const AdminLogin = () => {
       <Box className="admin-login"> 
       <ArrowBackIcon onClick={(eo) => {
           navigate("/")
-          console.log("szzzz")
       }} className='back-arrow'/>
-<div className="login-box">
+<Box className="login-box" sx={{top:{xs: "20vh",sm:"unset",},left:{xs:"unset",sm:"unset"},transform:{xs:"scale(0.75)",sm:"scale(1)"},width:{xs:"365px",sm:"400px"}}} component={"div"}>
 <h2>Admin Login</h2>
 <form>
   <div className="user-box">
@@ -72,7 +71,7 @@ const AdminLogin = () => {
     Submit
   </button>
 </form>
-</div>
+</Box>
 
 </Box>
   );
