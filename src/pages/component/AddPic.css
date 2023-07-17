@@ -45,3 +45,10 @@
   .css-1rcvvn7-MuiInputBase-root-MuiInput-root:before{
     border-bottom: none !important;
   }
+  .css-tk8qh5-MuiButtonBase-root-MuiButton-root:hover{
+    border: none !important;
+  }
+  .css-117inwb-MuiButtonBase-root-MuiButton-root:hover{
+    border: none !important;
+    background-color:transparent;
+  }

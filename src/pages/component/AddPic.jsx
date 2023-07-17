@@ -125,11 +125,12 @@ const AddPic = () => {
         <div>
         <Button sx={{
                   my: 2,
-                  color: "white",
-                  padding: "2px 10px",
+                  color: {xs:"#464646",md:"white"},
+                  padding: {xs:"2px 0",md:"2px 10px"},
                   display: "flex",
                   mt: 0,
                   mb: 0,
+                  border:"none"
                 }} variant="outlined" onClick={handleClickOpen}  endIcon={<AddIcon />}>
           Add Product
         </Button>
@@ -190,7 +191,8 @@ const AddPic = () => {
             </Toolbar>
           </AppBar>
           <Grid container className='addPic' sx={{flexDirection:{xs:"column",sm:"row"}}}>
-          <Grid item xs  sx={{display:"flex",flexDirection:"column",alignItems:"center",width:{xs:"90vw",sm:"inherit"}}}>
+          <Grid item xs  sx={{display:"flex",flexDirection:"column",alignItems:"center",width:{xs:"90vw",sm:"inherit"},
+                              ml:{xs:"5vw",sm:"inherit"}}}>
           <Typography variant="h6" mt={2} >Add info</Typography>
           <List sx={{margin:"revert"}}>
 
