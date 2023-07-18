@@ -15,6 +15,7 @@
     color: #2a2a2a;
     display: flex;
     justify-content: center;
+    z-index: 1;
   }
   .moreVert:hover{
     background-color:rgba(255, 255, 255, 0.6);
@@ -28,7 +29,7 @@
     left: 3px;
   }
   .css-dasnyc-MuiImageListItemBar-title{
-    white-space: normal !important;
+    white-space: pre-line !important;
     word-wrap: break-word;
   }
   .css-16iisoq-MuiImageListItem-root .MuiImageListItem-img{
@@ -154,4 +155,33 @@
 
 .css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root{
   justify-content: space-betweens;
+}
+dialog::backdrop{
+  background-color:#1a1a1a;
+  opacity: 0.8;
+}
+
+.dialog-big-img {
+  border: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 80%;
+  max-height: 92%;
+}
+
+.dialog-big-img img {
+  max-width: 100%;
+  max-height: 100%;
+}
+.css-n0z12e-MuiImageListItem-root .MuiImageListItem-img{
+  object-fit: contain !important;
+}
+.css-n0z12e-MuiImageListItem-root .MuiImageListItem-img:hover{
+  transform: scale(1.1);
 }

@@ -123,7 +123,7 @@ function SimpleDialog(props) {
           </a>
         </ListItem>
         <ListItem>
-          <a className="phone" href="tel:+213">
+          <a className="phone" href="tel:0794870863">
             <span></span>
             <span></span>
             <span></span>
@@ -216,9 +216,23 @@ const Home = () => {
 
 
 
+  const [SrcBigImage, setSrcBigImage] = useState(null);
 
+  const handleImgClick = (eo) => {
+ 
+    setSrcBigImage(eo.target.src);
+    setTimeout(() => {
+      document.getElementById("BigImage").style.display = "block";
+      document.getElementById("BigImage").showModal();
+    }, 700);
 
+  };
 
+    const handleImgClose = (eo) => {
+ 
+    document.getElementById("BigImage").style.display = "none";
+    document.getElementById("BigImage").close();
+  };
 
 
   
@@ -648,12 +662,13 @@ const Home = () => {
                 },
                 margin: "6px 0 0 0",
                 gap: "6px !important",
+                
               }}
             >
               {value.docs.map((item, index) => (
                 <ImageListItem
                   key={item.data().img_id}
-                  sx={{ height: {xs:"250px !important",sm:"480px !important"} }}
+                  sx={{ height: {xs:"250px !important",sm:"480px !important"}, overflow:"hidden"    }}
                 >
                   <IconButton onClick={handleOpenMenu} sx={{ p: 0 }}>
                     <Box
@@ -758,6 +773,9 @@ const Home = () => {
                         : null}
                       alt={item.data().Name}
                       loading="lazy"
+                      onClick={(eo) => {
+                        handleImgClick(eo)
+                      }}
                     />
                   )}
 
@@ -806,6 +824,19 @@ const Home = () => {
                   />
                 </ImageListItem>
               ))}
+
+      
+        <dialog id="BigImage" className="dialog-big-img" style={{display:"none"}} onClick={(eo) => {
+          if (eo.target.className !== "big-img") {
+            handleImgClose()
+          }
+        }} onKeyDown={(eo) => {
+          if (eo.key === 'Escape' || eo.keyCode === 27) {
+            handleImgClose()
+          }
+        }}>
+          <img src={SrcBigImage} alt="Big"  className="big-img" />
+        </dialog>
             </ImageList>
           </div>
         );
@@ -1191,7 +1222,9 @@ const Home = () => {
                           ? `${itemData[index].url}?w=248&fit=crop&auto=format`
                           : null
                       }
-                      srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                      srcSet={                        itemData[index] !== undefined
+                        ? `${itemData[index].url}?w=248&fit=crop&auto=format`
+                        : null}
                       alt={item.data().Name}
                       loading="lazy"
                       sx={{height:"100% !important"}}
