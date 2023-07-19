@@ -171,8 +171,8 @@ dialog::backdrop{
   display: flex;
   align-items: center;
   justify-content: center;
-  max-width: 80%;
-  max-height: 92%;
+  max-height: 78%;
+  overflow: hidden;
 }
 
 .dialog-big-img img {
@@ -181,7 +181,31 @@ dialog::backdrop{
 }
 .css-n0z12e-MuiImageListItem-root .MuiImageListItem-img{
   object-fit: contain !important;
+  cursor: pointer;
 }
 .css-n0z12e-MuiImageListItem-root .MuiImageListItem-img:hover{
   transform: scale(1.1);
+}
+
+.dialog-img-arrows{
+  position:fixed;
+  font-size:42px !important;
+  color:rgb(68, 68, 68);
+  background-color:rgba(234 ,234, 234 ,0.2);
+  border-radius:50%;
+  cursor: pointer;
+} 
+.dialog-img-arrows:hover{
+  color:rgb(43, 43, 43);
+  background-color:rgba(234 ,234, 234 ,0.3);
+}
+
+.dialog-img-nbr{
+    position:fixed;
+    left: 0;
+    font-size:25px;
+    align-items:center;
+    color: rgba(234 ,234, 234 ,0.4);
+    width: 100vw;
+    justify-content: center;
 }
