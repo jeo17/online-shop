@@ -55,11 +55,9 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Stack from '@mui/material/Stack';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CloseIcon from '@mui/icons-material/Close';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 const pages = [
   {
@@ -228,7 +226,7 @@ const Home = () => {
  
     setSrcBigImage(eo.target.src);
     setTimeout(() => {
-      document.getElementById("BigImage").style.display = "block";
+      document.getElementById("BigImage").style.display = "flex";
       document.getElementById("BigImage").showModal();
     }, 700);
 
@@ -836,17 +834,26 @@ const Home = () => {
           if (eo.key === 'Escape') {
             handleImgClose()
           }
+        }}    onClick={(eo) => {
+          console.log(eo.target.className)
+          if (eo.target.className === 'dialog-big-img MuiBox-root css-34vu7h') {
+            handleImgClose()
+          }
         }}>
-          <CloseIcon className="dialog-img-arrows" sx={{top:"20px !important",right:"3vw",color:"rgb(43, 43, 43);",transform:{xs:"scale(0.8)",sm:"scale(1)"}}}
-           onClick={handleImgClose} />
-         <ArrowBackIcon  className="dialog-img-arrows" sx={{left:{xs:"1px",sm:"3%"},transition:"left 0.5s" ,top:{xs:"32%",sm:"46%"},transform:{xs:"scale(0.8)",sm:"scale(1)"},"&:hover": { left:"3.5%" }, }}/>
-          <img src={SrcBigImage} alt="Big"  className="big-img" />
-          <ArrowForwardIcon className="dialog-img-arrows"sx={{right:{xs:"1px",sm:"3%"},transition:"right 0.5s",top:{xs:"32%",sm:"46%"},transform:{xs:"scale(0.8)",sm:"scale(1)"},"&:hover": { right:"3.5%", },}}/>
-          <Stack direction={"row"} className="dialog-img-nbr" sx={{  bottom:{xs:"40vh",sm:"3vh"} }}>
-          <ArrowBackIosIcon  sx={{fontSize:"26px"}}/>
+
+           <img src={SrcBigImage} alt="Big"  className="big-img" />
+
+           <Box className="bottom-dialog-bar">
+            <Box className="dialog-bar-cont" sx={{fontSize:"20px"}}>
+
+          <ArrowBackIosNewIcon className="dialog-img-nbr" />
           1/1
-          <ArrowForwardIosIcon sx={{fontSize:"26px"}}/>
-          </Stack>
+          <ArrowForwardIosIcon className="dialog-img-nbr" />
+            </Box>
+
+
+           </Box>
+
         </Box>
             </ImageList>
           </div>
