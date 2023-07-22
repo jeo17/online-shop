@@ -28,10 +28,13 @@
     position: relative;
     left: 3px;
   }
-  .css-dasnyc-MuiImageListItemBar-title{
+
+  .ImageListItemBar2 div{
     white-space: pre-line !important;
     word-wrap: break-word;
   }
+
+
   .css-16iisoq-MuiImageListItem-root .MuiImageListItem-img{
     height: 100% !important;
   }

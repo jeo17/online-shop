@@ -54,8 +54,6 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import Stack from '@mui/material/Stack';
-import CloseIcon from '@mui/icons-material/Close';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
@@ -808,6 +806,7 @@ const Home = () => {
                   <ImageListItemBar
                     id={`2-img-bar-${index}`}
                     sx={{ display: "none" }}
+                    className="ImageListItemBar2"
                     title={item.data().Details}
                     actionIcon={
                       <IconButton
