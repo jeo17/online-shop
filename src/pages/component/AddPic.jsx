@@ -23,6 +23,8 @@ import { doc, setDoc } from "firebase/firestore";
 import { db,storage } from '../../firebase/config';
 import { ref, uploadBytes } from "firebase/storage";
 import CircularProgress from '@mui/material/CircularProgress';
+import {  useTheme } from "@mui/material";
+
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -101,6 +103,8 @@ document
   .addEventListener("submit", customFormSubmitHandler);  */
 
 const AddPic = () => {
+  const theme = useTheme();
+
 
   const [EmptyTitle, setEmptyTitle] = useState(true);
   const [EmptyPrice, setEmptyPrice] = useState(true);
@@ -125,7 +129,7 @@ const AddPic = () => {
         <div>
         <Button sx={{
                   my: 2,
-                  color: {xs:"#464646",md:"white"},
+                  color: {xs:theme.palette.mode ==="dark"?"inherit":"#464646",md:"white"},
                   padding: {xs:"2px 0",md:"2px 10px"},
                   display: "flex",
                   mt: 0,
@@ -197,7 +201,7 @@ const AddPic = () => {
           <List sx={{margin:"revert"}}>
 
             <Box sx={{display:"flex",mb:"5%"}}>
-            <ListItem  sx={{width:"60%",border:"1px solid #132F4C",borderRadius:"10px",mr:"2%"}}> 
+            <ListItem  sx={{width:"60%",border:"1px solid",borderRadius:"10px",mr:"2%"}}> 
               <ListItemText
                 primary={        <TextField 
                   onChange={(eo) => {
@@ -215,7 +219,7 @@ const AddPic = () => {
             </ListItem>
 
 
-            <ListItem  sx={{width:"60%",border:"1px solid #132F4C",borderRadius:"10px"}}> 
+            <ListItem  sx={{width:"60%",border:"1px solid",borderRadius:"10px"}}> 
               <ListItemText
                 primary={        
                 <TextField 
@@ -237,7 +241,7 @@ const AddPic = () => {
               />
             </ListItem>
             </Box>
-            <ListItem  sx={{width:"100%",border:"1px solid #132F4C",borderRadius:"10px",mb:"8px"}}> 
+            <ListItem  sx={{width:"100%",border:"1px solid",borderRadius:"10px",mb:"8px"}}> 
               <ListItemText  
                 primary={        <TextField 
                   onChange={(eo) => {
@@ -266,7 +270,7 @@ const AddPic = () => {
           <form className="custom__form">
     <Typography variant="h6" mt={2}>Add images</Typography>
   <div className="custom__image-container" style={{marginTop:"18px"}} >
-    <label id="add-img-label" htmlFor="add-single-img">
+    <label id="add-img-label" htmlFor="add-single-img" style={{border:theme.palette.mode === "dark" ? "solid 1px white":"solid 1px black"}}>
       +
     </label>
     <input type="file" id="add-single-img" accept="image/jpeg" onChange={(eo) => {

@@ -45,7 +45,7 @@ function App() {
 
     <ThemeProvider theme={theme}>
     <CssBaseline />
-    <Box><RouterProvider router={router} /></Box>
+    <Box  className={mode}><RouterProvider router={router} /></Box>
     </ThemeProvider>
   )
 }

@@ -266,6 +266,7 @@ const Home = (setmyMOde) => {
                     />
                   ) : (
                     <img
+                      className="small-img"
                       src={
                         itemData[index] !== undefined
                           ? `${itemData[index].url}?w=248&fit=crop&auto=format`
@@ -406,6 +407,7 @@ const Home = (setmyMOde) => {
                       "&:hover": {
                         backgroundColor: "rgba(255, 255, 255, 0.45)",
                       },
+                      zIndex:"5"
                     }}
                     {...label}
                     icon={<BookmarkBorderIcon />}
@@ -419,6 +421,7 @@ const Home = (setmyMOde) => {
                     />
                   ) : (
                     <img
+                    className="small-img"
                       src={
                         itemData[index] !== undefined
                           ? `${itemData[index].url}?w=248&fit=crop&auto=format`

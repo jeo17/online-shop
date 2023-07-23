@@ -58,10 +58,11 @@
   font-size:40px;
   text-align:center;
   text-decoration:none;
-  color:#404040;
+  color: #666;;
   margin: 0 30px;
   transition:.5s;
 }
+
 .contact-us ul li a span {
   position:absolute;
   transition: transform .5s;
@@ -70,8 +71,9 @@
 .contact-us ul li a span:nth-child(3){
   width:100%;
   height:3px;
-  background:#404040;
+  background:#666;
 }
+
 .contact-us ul li a span:nth-child(1) {
   top:0;
   left:0;
@@ -191,12 +193,12 @@ dialog::backdrop{
   object-fit: contain;
   max-height: 100vh;
 }
-.css-n0z12e-MuiImageListItem-root .MuiImageListItem-img{
+.small-img{
   object-fit: contain !important;
   cursor: pointer;
   transition: all 0.4s;
 }
-.css-n0z12e-MuiImageListItem-root .MuiImageListItem-img:hover{
+.small-img:hover{
   transform: scale(1.1);
 }
 
