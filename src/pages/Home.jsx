@@ -26,11 +26,8 @@ import { db, storage } from "../firebase/config";
 import { ref, getDownloadURL, deleteObject } from "firebase/storage";
 import { doc, deleteDoc } from "firebase/firestore";
 import Skeleton from "@mui/material/Skeleton";
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-
-
-
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 
 const imgSettings = [
   {
@@ -55,51 +52,36 @@ const Home = () => {
   const [trashID, settrashID] = useState(null);
   const [trashName, settrashName] = useState(null);
 
-  const [user, loadingg] = useAuthState(auth);
+  const [user] = useAuthState(auth);
 
   const theme = useTheme();
 
   const navigate = useNavigate();
 
-
-
-
   const [anchorEl, setanchorEl] = React.useState(null);
-
-
 
   const handleOpenMenu = (event) => {
     setanchorEl(event.currentTarget);
   };
 
-
-
   const handleCloseMenu = () => {
     setanchorEl(null);
   };
 
-
-
   const [SrcBigImage, setSrcBigImage] = useState(null);
 
   const handleImgClick = (eo) => {
- 
     setSrcBigImage(eo.target.src);
     setTimeout(() => {
       document.getElementById("BigImage").style.display = "flex";
       document.getElementById("BigImage").showModal();
     }, 700);
-
   };
 
-    const handleImgClose = (eo) => {
- 
+  const handleImgClose = (eo) => {
     document.getElementById("BigImage").style.display = "none";
     document.getElementById("BigImage").close();
   };
-
-
-  
 
   setTimeout(() => {
     setread(true);
@@ -163,13 +145,11 @@ const Home = () => {
   }
 
   if (user) {
-    console.log(user)
     if (user.uid === "1z7kIqBfyah5oLIh6KxXNtpMSrw2") {
       if (value) {
         return (
           <div>
-
-           <Header /> 
+            <Header />
 
             <ImageList
               sx={{
@@ -183,13 +163,15 @@ const Home = () => {
                 },
                 margin: "6px 0 0 0",
                 gap: "6px !important",
-                
               }}
             >
               {value.docs.map((item, index) => (
                 <ImageListItem
                   key={item.data().img_id}
-                  sx={{ height: {xs:"250px !important",sm:"480px !important"}, overflow:"hidden"    }}
+                  sx={{
+                    height: { xs: "250px !important", sm: "480px !important" },
+                    overflow: "hidden",
+                  }}
                 >
                   <IconButton onClick={handleOpenMenu} sx={{ p: 0 }}>
                     <Box
@@ -289,13 +271,15 @@ const Home = () => {
                           ? `${itemData[index].url}?w=248&fit=crop&auto=format`
                           : null
                       }
-                      srcSet={                        itemData[index] !== undefined
-                        ? `${itemData[index].url}?w=248&fit=crop&auto=format`
-                        : null}
+                      srcSet={
+                        itemData[index] !== undefined
+                          ? `${itemData[index].url}?w=248&fit=crop&auto=format`
+                          : null
+                      }
                       alt={item.data().Name}
                       loading="lazy"
                       onClick={(eo) => {
-                        handleImgClick(eo)
+                        handleImgClick(eo);
                       }}
                     />
                   )}
@@ -347,32 +331,40 @@ const Home = () => {
                 </ImageListItem>
               ))}
 
-      
-        <Box id="BigImage" className="dialog-big-img" component={"dialog"} sx={{display:"none",bottom:{xs:"32%",sm:"0"},maxWidth: {xs:"90%",sm:"80%"}}}  onKeyDown={(eo) => {
-          if (eo.key === 'Escape') {
-            handleImgClose()
-          }
-        }}    onClick={(eo) => {
-          console.log(eo.target.className)
-          if (eo.target.className === 'dialog-big-img MuiBox-root css-34vu7h') {
-            handleImgClose()
-          }
-        }}>
+              <Box
+                id="BigImage"
+                className="dialog-big-img"
+                component={"dialog"}
+                sx={{
+                  display: "none",
+                  bottom: { xs: "32%", sm: "0" },
+                  maxWidth: { xs: "90%", sm: "80%" },
+                }}
+                onKeyDown={(eo) => {
+                  if (eo.key === "Escape") {
+                    handleImgClose();
+                  }
+                }}
+                onClick={(eo) => {
+                  console.log(eo.target.className);
+                  if (
+                    eo.target.className ===
+                    "dialog-big-img MuiBox-root css-34vu7h"
+                  ) {
+                    handleImgClose();
+                  }
+                }}
+              >
+                <img src={SrcBigImage} alt="Big" className="big-img" />
 
-           <img src={SrcBigImage} alt="Big"  className="big-img" />
-
-           <Box className="bottom-dialog-bar">
-            <Box className="dialog-bar-cont" sx={{fontSize:"20px"}}>
-
-          <ArrowBackIosNewIcon className="dialog-img-nbr" />
-          1/1
-          <ArrowForwardIosIcon className="dialog-img-nbr" />
-            </Box>
-
-
-           </Box>
-
-        </Box>
+                <Box className="bottom-dialog-bar">
+                  <Box className="dialog-bar-cont" sx={{ fontSize: "20px" }}>
+                    <ArrowBackIosNewIcon className="dialog-img-nbr" />
+                    1/1
+                    <ArrowForwardIosIcon className="dialog-img-nbr" />
+                  </Box>
+                </Box>
+              </Box>
             </ImageList>
           </div>
         );
@@ -381,8 +373,7 @@ const Home = () => {
       if (value) {
         return (
           <div>
- 
-           <Header />
+            <Header />
 
             <ImageList
               sx={{
@@ -401,7 +392,9 @@ const Home = () => {
               {value.docs.map((item, index) => (
                 <ImageListItem
                   key={item.data().Details}
-                  sx={{ height: {xs:"250px !important",sm:"480px !important"} }}
+                  sx={{
+                    height: { xs: "250px !important", sm: "480px !important" ,overflow:"hidden"},
+                  }}
                 >
                   <Checkbox
                     sx={{
@@ -431,12 +424,17 @@ const Home = () => {
                           ? `${itemData[index].url}?w=248&fit=crop&auto=format`
                           : null
                       }
-                      srcSet={                        itemData[index] !== undefined
-                        ? `${itemData[index].url}?w=248&fit=crop&auto=format`
-                        : null}
+                      srcSet={
+                        itemData[index] !== undefined
+                          ? `${itemData[index].url}?w=248&fit=crop&auto=format`
+                          : null
+                      }
                       alt={item.data().Name}
                       loading="lazy"
-                      sx={{height:"100% !important"}}
+                      onClick={(eo) => {
+                        handleImgClick(eo);
+                      }}
+                      sx={{ height: "100% !important" }}
                     />
                   )}
                   <ImageListItemBar
@@ -485,6 +483,41 @@ const Home = () => {
                   />
                 </ImageListItem>
               ))}
+
+<Box
+                id="BigImage"
+                className="dialog-big-img"
+                component={"dialog"}
+                sx={{
+                  display: "none",
+                  bottom: { xs: "32%", sm: "0" },
+                  maxWidth: { xs: "90%", sm: "80%" },
+                }}
+                onKeyDown={(eo) => {
+                  if (eo.key === "Escape") {
+                    handleImgClose();
+                  }
+                }}
+                onClick={(eo) => {
+                  console.log(eo.target.className);
+                  if (
+                    eo.target.className ===
+                    "dialog-big-img MuiBox-root css-34vu7h"
+                  ) {
+                    handleImgClose();
+                  }
+                }}
+              >
+                <img src={SrcBigImage} alt="Big" className="big-img" />
+
+                <Box className="bottom-dialog-bar">
+                  <Box className="dialog-bar-cont" sx={{ fontSize: "20px" }}>
+                    <ArrowBackIosNewIcon className="dialog-img-nbr" />
+                    1/1
+                    <ArrowForwardIosIcon className="dialog-img-nbr" />
+                  </Box>
+                </Box>
+              </Box>
             </ImageList>
           </div>
         );

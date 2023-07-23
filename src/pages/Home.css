@@ -154,6 +154,13 @@
 
 .css-1czxh0d-MuiImageListItem-root .MuiImageListItem-img{
   height: 100% !important;
+  object-fit: contain !important;
+  cursor: pointer;
+  transition: all 0.4s;
+}
+
+.css-1czxh0d-MuiImageListItem-root .MuiImageListItem-img:hover{
+  transform: scale(1.1);
 }
 
 .css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root{
@@ -187,6 +194,7 @@ dialog::backdrop{
 .css-n0z12e-MuiImageListItem-root .MuiImageListItem-img{
   object-fit: contain !important;
   cursor: pointer;
+  transition: all 0.4s;
 }
 .css-n0z12e-MuiImageListItem-root .MuiImageListItem-img:hover{
   transform: scale(1.1);
