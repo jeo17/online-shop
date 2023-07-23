@@ -178,6 +178,8 @@
     position: absolute;
     top: 10px;
     left: 5px;
+    width: 1.7em !important;
+    height: 1.7em !important;
   }
   .back-arrow:hover{
     transform: scale(1.05);

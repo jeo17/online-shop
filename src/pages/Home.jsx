@@ -42,7 +42,7 @@ const imgSettings = [
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
-const Home = () => {
+const Home = (setmyMOde) => {
   const [value, loading] = useCollection(
     query(collection(db, "Products"), orderBy("img_id", "desc"))
   );
@@ -149,7 +149,7 @@ const Home = () => {
       if (value) {
         return (
           <div>
-            <Header />
+            <Header {...{setmyMOde}}/>
 
             <ImageList
               sx={{
@@ -373,7 +373,7 @@ const Home = () => {
       if (value) {
         return (
           <div>
-            <Header />
+            <Header {...{setmyMOde}}/>
 
             <ImageList
               sx={{

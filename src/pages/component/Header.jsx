@@ -39,6 +39,8 @@ import BookmarksIcon from "@mui/icons-material/Bookmarks";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { styled } from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
+import {  useTheme } from "@mui/material";
+
 
 const pages = [
   {
@@ -182,7 +184,8 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-const Header = () => {
+const Header = (setmyMOde) => {
+  const theme = useTheme();
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
 
@@ -500,8 +503,16 @@ const Header = () => {
 
           <Box sx={{ flexGrow: 0 }}>
             <FormControlLabel
-              control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked />}
+              control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked={theme.palette.mode === "dark" ? true : false} />}
               label=""
+              onClick={() => {
+                localStorage.setItem(
+                  "currentMode",
+                  theme.palette.mode === "dark" ? "light" : "dark"
+                );
+  
+                setmyMOde.setmyMOde.setmyMOde(theme.palette.mode === "light" ? "dark" : "light");
+              }}
             />
 
             <Tooltip title="Open settings">
