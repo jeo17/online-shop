@@ -1,20 +1,14 @@
-
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import AdminLogin from "./pages/AdminLogin";
-import React, { useMemo,useState } from "react";
+import React, { useMemo, useState } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import getDesignTokens from "./styles/MyTheme";
 import { Box, CssBaseline } from "@mui/material";
-
-
+import { ThemeProviderContext } from "./context/Context";
 
 function App() {
-
   const [mode, setmyMOde] = useState(
     localStorage.getItem("currentMode") === null
       ? "dark"
@@ -29,25 +23,27 @@ function App() {
     {
       path: "/",
       element: <Login />,
-     // errorElement: <Page404 />
+      // errorElement: <Page404 />
     },
     {
       path: "/home",
-      element: <Home {...{setmyMOde}}/>,
+      element: <Home {...{ setmyMOde }} />,
     },
     {
       path: "/admin-login",
       element: <AdminLogin />,
     },
-    
   ]);
-  return(
-
+  return (
     <ThemeProvider theme={theme}>
-    <CssBaseline />
-    <Box  className={mode}><RouterProvider router={router} /></Box>
+      <ThemeProviderContext>
+        <CssBaseline />
+        <Box className={mode}>
+          <RouterProvider router={router} />
+        </Box>
+      </ThemeProviderContext>
     </ThemeProvider>
-  )
+  );
 }
 
 export default App;

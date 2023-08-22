@@ -2,7 +2,6 @@ import React from "react";
 import "./Login.css";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { grey, blue } from "@mui/material/colors";
@@ -15,7 +14,6 @@ import { useEffect } from "react";
 import { auth, provider, provider2 } from "../firebase/config";
 import {
   signInWithPopup,
-  FacebookAuthProvider,
 } from "firebase/auth";
 
 
@@ -24,7 +22,7 @@ import {
 
 
 const Login = () => {
-  const [user, loading, error] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
   const navigate = useNavigate();
   const GoogleButton = styled(Button)(({ theme }) => ({
     color: theme.palette.getContrastText(grey[50]),
@@ -57,7 +55,7 @@ const Login = () => {
   });
 
 if (loading) {
-   <Typography variant="h3" color="initial"> please wait. this won't take long</Typography>
+
 
 }
 
@@ -119,30 +117,17 @@ if (!user && !loading) {
           <FacebookButton
             onClick={(eo) => {
               signInWithPopup(auth, provider2)
-  .then((result) => {
-    // The signed-in user info.
-    const user = result.user;
+                .then((result) => {
+                  const user = result.user;
 
-    // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-    const credential = FacebookAuthProvider.credentialFromResult(result);
-    const accessToken = credential.accessToken;
-
-   console.log(user)
-   navigate("/home")
-  })
-  .catch((error) => {
-    // Handle Errors here.
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    // The email of the user's account used.
-    const email = error.customData.email;
-    // The AuthCredential type that was used.
-    const credential = FacebookAuthProvider.credentialFromError(error);
-
-    console.log(errorCode)
-
-    // ...
-  });
+                  navigate("/home");
+                  console.log(user);
+                })
+                .catch((error) => {
+                  // Handle Errors here.
+                  const errorCode = error.code;
+                  console.log(errorCode);
+                });
             }}
             sx={{ borderRadius: "8px" }}
             size="large"

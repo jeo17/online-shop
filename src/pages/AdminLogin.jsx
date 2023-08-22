@@ -1,7 +1,6 @@
 import React from 'react';
 import "./AdminLogin.css"
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from "react-router-dom";
 import {signInWithEmailAndPassword } from "firebase/auth";
@@ -23,7 +22,7 @@ const AdminLogin = () => {
       }
     });
     if (loading) {
-      <Typography variant="h3" color="initial"> please wait. this won't take long</Typography>
+
    
    }
 

@@ -21,13 +21,14 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCollection } from "react-firebase-hooks/firestore";
-import { collection, orderBy, query } from "firebase/firestore";
 import { db, storage } from "../firebase/config";
 import { ref, getDownloadURL, deleteObject } from "firebase/storage";
 import { doc, deleteDoc } from "firebase/firestore";
 import Skeleton from "@mui/material/Skeleton";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import { useContext } from "react";
+import ThemeContext from "../context/Context";
 
 const imgSettings = [
   {
@@ -43,14 +44,15 @@ const imgSettings = [
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 const Home = (setmyMOde) => {
-  const [value, loading] = useCollection(
-    query(collection(db, "Products"), orderBy("img_id", "desc"))
-  );
+  const { myCategorieQuery, arrayItem } = useContext(ThemeContext);
+
+  const [value, loading] = useCollection(myCategorieQuery);
 
   const [read, setread] = useState(false);
 
   const [trashID, settrashID] = useState(null);
   const [trashName, settrashName] = useState(null);
+  const [trashCate, settrashCate] = useState(null);
 
   const [user] = useAuthState(auth);
 
@@ -111,21 +113,27 @@ const Home = (setmyMOde) => {
     if (!user && !loading) {
       navigate("/");
     }
-  });
+  }, [value]);
 
   if (loading) {
-    <Typography variant="h3"> please wait. this won't take long</Typography>;
+    return <Typography component={"h2"}> Please wait</Typography>;
   }
 
   if (value) {
     value.docs.map((item) =>
       getDownloadURL(
-        ref(storage, `/Products/${item.data().Name}/${item.data().img_id}/1`)
+        ref(
+          storage,
+          `/Products/${item.data().Categorie}/${item.data().Name}/${
+            item.data().img_id
+          }/1`
+        )
       )
         .then((url) => {
           var myObject = {
             url: url,
             id: item.data().img_id,
+            categorie: item.data().Categorie,
           };
 
           if (objectExistsInArray(itemData, myObject) === false) {
@@ -147,9 +155,12 @@ const Home = (setmyMOde) => {
   if (user) {
     if (user.uid === "1z7kIqBfyah5oLIh6KxXNtpMSrw2") {
       if (value) {
+        const XboxItems = itemData.filter((item) => item.categorie === "Xbox");
+        const PlayItems = itemData.filter((item) => item.categorie === "Playstation");
+        const PspItems = itemData.filter((item) => item.categorie === "Psp");
         return (
           <div>
-            <Header {...{setmyMOde}}/>
+            <Header {...{ setmyMOde }} />
 
             <ImageList
               sx={{
@@ -178,9 +189,11 @@ const Home = (setmyMOde) => {
                       className="moreVert"
                       id={item.data().img_id}
                       data-name={item.data().Name}
+                      data-cate={item.data().Categorie}
                       onClick={(eo) => {
                         settrashID(eo.target.id);
                         settrashName(eo.target.getAttribute("data-name"));
+                        settrashCate(eo.target.getAttribute("data-Cate"));
                       }}
                     ></Box>
                   </IconButton>
@@ -209,7 +222,7 @@ const Home = (setmyMOde) => {
                           if (setting.Name === "Delete") {
                             const pictureRef = ref(
                               storage,
-                              `/Products/${trashName}/${trashID}/1`
+                              `/Products/${trashCate}/${trashName}/${trashID}/1`
                             );
 
                             let trashIDnumber = Number(trashID);
@@ -268,13 +281,41 @@ const Home = (setmyMOde) => {
                     <img
                       className="small-img"
                       src={
-                        itemData[index] !== undefined
-                          ? `${itemData[index].url}?w=248&fit=crop&auto=format`
+                        arrayItem === "itemData"
+                          ? itemData[index] !== undefined
+                            ? `${itemData[index].url}?w=248&fit=crop&auto=format`
+                            : null
+                          : arrayItem === "XboxItems"
+                          ? XboxItems[index] !== undefined
+                            ? `${XboxItems[index].url}?w=248&fit=crop&auto=format`
+                            : null
+                          : arrayItem === "PlayItems"
+                          ? PlayItems[index] !== undefined
+                            ? `${PlayItems[index].url}?w=248&fit=crop&auto=format`
+                            : null
+                          : arrayItem === "PspItems"
+                          ? PspItems[index] !== undefined
+                            ? `${PspItems[index].url}?w=248&fit=crop&auto=format`
+                            : null
                           : null
                       }
                       srcSet={
-                        itemData[index] !== undefined
-                          ? `${itemData[index].url}?w=248&fit=crop&auto=format`
+                        arrayItem === "itemData"
+                          ? itemData[index] !== undefined
+                            ? `${itemData[index].url}?w=248&fit=crop&auto=format`
+                            : null
+                          : arrayItem === "XboxItems"
+                          ? XboxItems[index] !== undefined
+                            ? `${XboxItems[index].url}?w=248&fit=crop&auto=format`
+                            : null
+                          : arrayItem === "PlayItems"
+                          ? PlayItems[index] !== undefined
+                            ? `${PlayItems[index].url}?w=248&fit=crop&auto=format`
+                            : null
+                          : arrayItem === "PspItems"
+                          ? PspItems[index] !== undefined
+                            ? `${PspItems[index].url}?w=248&fit=crop&auto=format`
+                            : null
                           : null
                       }
                       alt={item.data().Name}
@@ -288,7 +329,7 @@ const Home = (setmyMOde) => {
                   <ImageListItemBar
                     id={`1-img-bar-${index}`}
                     title={item.data().Name}
-                    subtitle={item.data().Price}
+                    subtitle={`${item.data().Price}.00 DA`}
                     actionIcon={
                       <IconButton
                         onClick={(eo) => {
@@ -372,9 +413,12 @@ const Home = (setmyMOde) => {
       }
     } else {
       if (value) {
+        const XboxItems = itemData.filter((item) => item.categorie === "Xbox");
+        const PlayItems = itemData.filter((item) => item.categorie === "Playstation");
+        const PspItems = itemData.filter((item) => item.categorie === "Psp");
         return (
           <div>
-            <Header {...{setmyMOde}}/>
+            <Header {...{ setmyMOde }} />
 
             <ImageList
               sx={{
@@ -394,7 +438,11 @@ const Home = (setmyMOde) => {
                 <ImageListItem
                   key={item.data().Details}
                   sx={{
-                    height: { xs: "250px !important", sm: "480px !important" ,overflow:"hidden"},
+                    height: {
+                      xs: "250px !important",
+                      sm: "480px !important",
+                      overflow: "hidden",
+                    },
                   }}
                 >
                   <Checkbox
@@ -407,7 +455,7 @@ const Home = (setmyMOde) => {
                       "&:hover": {
                         backgroundColor: "rgba(255, 255, 255, 0.45)",
                       },
-                      zIndex:"5"
+                      zIndex: "5",
                     }}
                     {...label}
                     icon={<BookmarkBorderIcon />}
@@ -421,15 +469,43 @@ const Home = (setmyMOde) => {
                     />
                   ) : (
                     <img
-                    className="small-img"
+                      className="small-img"
                       src={
-                        itemData[index] !== undefined
-                          ? `${itemData[index].url}?w=248&fit=crop&auto=format`
+                        arrayItem === "itemData"
+                          ? itemData[index] !== undefined
+                            ? `${itemData[index].url}?w=248&fit=crop&auto=format`
+                            : null
+                          : arrayItem === "XboxItems"
+                          ? XboxItems[index] !== undefined
+                            ? `${XboxItems[index].url}?w=248&fit=crop&auto=format`
+                            : null
+                          : arrayItem === "PlayItems"
+                          ? PlayItems[index] !== undefined
+                            ? `${PlayItems[index].url}?w=248&fit=crop&auto=format`
+                            : null
+                          : arrayItem === "PspItems"
+                          ? PspItems[index] !== undefined
+                            ? `${PspItems[index].url}?w=248&fit=crop&auto=format`
+                            : null
                           : null
                       }
                       srcSet={
-                        itemData[index] !== undefined
-                          ? `${itemData[index].url}?w=248&fit=crop&auto=format`
+                        arrayItem === "itemData"
+                          ? itemData[index] !== undefined
+                            ? `${itemData[index].url}?w=248&fit=crop&auto=format`
+                            : null
+                          : arrayItem === "XboxItems"
+                          ? XboxItems[index] !== undefined
+                            ? `${XboxItems[index].url}?w=248&fit=crop&auto=format`
+                            : null
+                          : arrayItem === "PlayItems"
+                          ? PlayItems[index] !== undefined
+                            ? `${PlayItems[index].url}?w=248&fit=crop&auto=format`
+                            : null
+                          : arrayItem === "PspItems"
+                          ? PspItems[index] !== undefined
+                            ? `${PspItems[index].url}?w=248&fit=crop&auto=format`
+                            : null
                           : null
                       }
                       alt={item.data().Name}
@@ -443,7 +519,7 @@ const Home = (setmyMOde) => {
                   <ImageListItemBar
                     id={`1-img-bar-${index}`}
                     title={item.data().Name}
-                    subtitle={item.data().Price}
+                    subtitle={`${item.data().Price}.00 DA`}
                     actionIcon={
                       <IconButton
                         onClick={(eo) => {
@@ -487,7 +563,7 @@ const Home = (setmyMOde) => {
                 </ImageListItem>
               ))}
 
-<Box
+              <Box
                 id="BigImage"
                 className="dialog-big-img"
                 component={"dialog"}
