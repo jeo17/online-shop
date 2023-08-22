@@ -39,8 +39,7 @@ import BookmarksIcon from "@mui/icons-material/Bookmarks";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { styled } from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
-import {  useTheme } from "@mui/material";
-
+import { useTheme } from "@mui/material";
 
 const pages = [
   {
@@ -79,10 +78,10 @@ const settings2 = [
 /********    functions of contact dialog      **********/
 
 function SimpleDialog(props) {
-  const { onClose, selectedValue, open } = props;
+  const { onClose, open } = props;
 
   const handleClose = () => {
-    onClose(selectedValue);
+    onClose();
   };
 
   return (
@@ -94,7 +93,7 @@ function SimpleDialog(props) {
             className="facebook"
             href="https://www.facebook.com/hamo.milano"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer" 
           >
             <span></span>
             <span></span>
@@ -116,7 +115,7 @@ function SimpleDialog(props) {
           <a
             className="instagram"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer" 
             href="https://www.instagram.com/milano.hamo/?igshid=MzRlODBiNWFlZA%3D%3D&fbclid=IwAR1XjaUP-fDPm7-EzjSKkGxG4Vij63BqgjHDe2GHcOfxtzV_9zwiuDOT6lo"
           >
             <span></span>
@@ -134,7 +133,6 @@ function SimpleDialog(props) {
 SimpleDialog.propTypes = {
   onClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
-  selectedValue: PropTypes.string.isRequired,
 };
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
@@ -353,9 +351,7 @@ const Header = (setmyMOde) => {
 
               {user.uid === "1z7kIqBfyah5oLIh6KxXNtpMSrw2" && (
                 <MenuItem onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">
-                    <AddPic />
-                  </Typography>
+                  <ListItemText primary={<AddPic />} />
                 </MenuItem>
               )}
             </Menu>
@@ -493,25 +489,32 @@ const Header = (setmyMOde) => {
             </Button>
 
             {user.uid === "1z7kIqBfyah5oLIh6KxXNtpMSrw2" && (
-              <Button>
-                <ListItemButton>
+
+                <ListItemButton sx={{flexGrow :"0"}}>
                   <ListItemText primary={<AddPic />} />
                 </ListItemButton>
-              </Button>
+   
             )}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
             <FormControlLabel
-              control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked={theme.palette.mode === "dark" ? true : false} />}
+              control={
+                <MaterialUISwitch
+                  sx={{ m: 1 }}
+                  defaultChecked={theme.palette.mode === "dark" ? true : false}
+                />
+              }
               label=""
               onClick={() => {
                 localStorage.setItem(
                   "currentMode",
                   theme.palette.mode === "dark" ? "light" : "dark"
                 );
-  
-                setmyMOde.setmyMOde.setmyMOde(theme.palette.mode === "light" ? "dark" : "light");
+
+                setmyMOde.setmyMOde.setmyMOde(
+                  theme.palette.mode === "light" ? "dark" : "light"
+                );
               }}
             />
 

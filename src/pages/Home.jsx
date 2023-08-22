@@ -51,6 +51,7 @@ const Home = (setmyMOde) => {
 
   const [trashID, settrashID] = useState(null);
   const [trashName, settrashName] = useState(null);
+  const [trashCate, settrashCate] = useState(null);
 
   const [user] = useAuthState(auth);
 
@@ -114,13 +115,13 @@ const Home = (setmyMOde) => {
   });
 
   if (loading) {
-    <Typography variant="h3"> please wait. this won't take long</Typography>;
+    
   }
 
   if (value) {
     value.docs.map((item) =>
       getDownloadURL(
-        ref(storage, `/Products/${item.data().Name}/${item.data().img_id}/1`)
+        ref(storage, `/Products/${item.data().Categorie}/${item.data().Name}/${item.data().img_id}/1`)
       )
         .then((url) => {
           var myObject = {
@@ -178,9 +179,11 @@ const Home = (setmyMOde) => {
                       className="moreVert"
                       id={item.data().img_id}
                       data-name={item.data().Name}
+                      data-cate={item.data().Categorie}
                       onClick={(eo) => {
                         settrashID(eo.target.id);
                         settrashName(eo.target.getAttribute("data-name"));
+                        settrashCate(eo.target.getAttribute("data-Cate"));
                       }}
                     ></Box>
                   </IconButton>
@@ -209,7 +212,7 @@ const Home = (setmyMOde) => {
                           if (setting.Name === "Delete") {
                             const pictureRef = ref(
                               storage,
-                              `/Products/${trashName}/${trashID}/1`
+                              `/Products/${trashCate}/${trashName}/${trashID}/1`
                             );
 
                             let trashIDnumber = Number(trashID);
@@ -288,7 +291,7 @@ const Home = (setmyMOde) => {
                   <ImageListItemBar
                     id={`1-img-bar-${index}`}
                     title={item.data().Name}
-                    subtitle={item.data().Price}
+                    subtitle={`${item.data().Price}.00 DA`}
                     actionIcon={
                       <IconButton
                         onClick={(eo) => {
@@ -443,7 +446,7 @@ const Home = (setmyMOde) => {
                   <ImageListItemBar
                     id={`1-img-bar-${index}`}
                     title={item.data().Name}
-                    subtitle={item.data().Price}
+                    subtitle={`${item.data().Price}.00 DA`}
                     actionIcon={
                       <IconButton
                         onClick={(eo) => {
