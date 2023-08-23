@@ -116,18 +116,26 @@ const Home = (setmyMOde) => {
   }, [value]);
 
   if (loading) {
+<<<<<<< HEAD
     return <Typography component={"h2"}> Please wait</Typography>;
+=======
+    
+>>>>>>> a2192e91aa2322217e6c4d1f08bae2c8478a81bf
   }
 
   if (value) {
     value.docs.map((item) =>
       getDownloadURL(
+<<<<<<< HEAD
         ref(
           storage,
           `/Products/${item.data().Categorie}/${item.data().Name}/${
             item.data().img_id
           }/1`
         )
+=======
+        ref(storage, `/Products/${item.data().Categorie}/${item.data().Name}/${item.data().img_id}/1`)
+>>>>>>> a2192e91aa2322217e6c4d1f08bae2c8478a81bf
       )
         .then((url) => {
           var myObject = {
