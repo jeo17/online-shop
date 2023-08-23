@@ -413,6 +413,15 @@ const Header = (setmyMOde) => {
                     </ListItemIcon>
                     <ListItemText primary="PSP" />
                   </ListItemButton>
+
+                  <ListItemButton sx={{ pl: 4 }}  onClick={(eo) => {
+                    Query(query( collection(db, "Products"),orderBy("img_id", "desc")))
+                    changeArray("itemData")
+                  }}>
+                    <ListItemText>
+                    <Typography variant="body1" color="#228be4" sx={{fontWeight:"900"}}>ALL</Typography>
+                    </ListItemText>
+                  </ListItemButton>
                 </List>
               </Collapse>
 

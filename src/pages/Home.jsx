@@ -447,13 +447,14 @@ const Home = (setmyMOde) => {
                 >
                   <Checkbox
                     sx={{
+                      color: "#383838",
                       position: "absolute",
                       right: "8px",
                       top: "10px",
                       transform: "scale(1.1)",
                       backgroundColor: "rgba(255, 255, 255, 0.35)",
                       "&:hover": {
-                        backgroundColor: "rgba(255, 255, 255, 0.45)",
+                        backgroundColor: "rgba(255, 255, 255, 0.55)",
                       },
                       zIndex: "5",
                     }}
