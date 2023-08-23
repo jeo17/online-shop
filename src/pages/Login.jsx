@@ -14,10 +14,6 @@ import { useEffect } from "react";
 import { auth, provider, provider2 } from "../firebase/config";
 import {
   signInWithPopup,
-<<<<<<< HEAD
-=======
-  FacebookAuthProvider ,
->>>>>>> a2192e91aa2322217e6c4d1f08bae2c8478a81bf
 } from "firebase/auth";
 
 

@@ -39,8 +39,7 @@ import BookmarksIcon from "@mui/icons-material/Bookmarks";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { styled } from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
-<<<<<<< HEAD
-import { useTheme, Drawer } from "@mui/material";
+import { useTheme } from "@mui/material";
 import {useContext } from "react";
 import Context from "../../context/Context";
 import { useCollection } from "react-firebase-hooks/firestore";
@@ -49,9 +48,6 @@ import { ref, getDownloadURL } from "firebase/storage";
 
 
 
-=======
-import { useTheme } from "@mui/material";
->>>>>>> a2192e91aa2322217e6c4d1f08bae2c8478a81bf
 
 const pages = [
   {
