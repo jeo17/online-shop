@@ -1,16 +1,17 @@
+@import url('https://fonts.cdnfonts.com/css/pac-font');
+
 .login{
     width: 100vw;
     height: 100vh;
-    background-image: url("../images/gifntext-gif.gif");
+    background-image: url("../images/d38f7e0a0c8b4e81f1426c58d678d2f5.gif");
     background-color: #2a2a4b;
     background-repeat: no-repeat;
     background-size: contain;
     display: flex;
-    align-items: center;
-    justify-content: center;
     position: relative;
 }
 .buttons{
+    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -20,5 +21,97 @@
     height: 300px;
     flex-shrink: 0;
     position: absolute;
-    left: 10%;
+}
+.left-design {
+    flex: 1; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Define the styles for the right section */
+.right-design {
+    flex: 1; 
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.right-design div{
+   
+    height: fit-content;
+}
+
+
+@keyframes first-word-animation {
+    0% {
+        opacity: 0;
+    }
+    12% {
+        opacity: 1;
+    }
+    25% {
+        opacity: 0;
+    }
+    37% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 0;
+    }
+    60% {
+        opacity: 1;
+    }
+    72% {
+        opacity: 0;
+    }   
+    90% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+@keyframes second-word-animation {
+    0% {
+        opacity: 0;
+    }
+    25% {
+        opacity: 0;
+    }
+    37% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    60% {
+        opacity: 1;
+    }
+    72% {
+        opacity: 0;
+    }   
+    90% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.hamo{
+    font-family: 'PacFont', sans-serif !important;
+    font-size: 48px !important;
+    Animation :  first-word-animation 8s ease-in-out 1s forwards infinite;
+}
+.store{
+    font-family: 'PacFont', sans-serif !important;
+    font-size: 48px !important;
+    Animation :  second-word-animation 8s ease-in-out 1s forwards infinite;
+}
+
+.Hamo-store{
+    display: flex;
+    
+
 }
