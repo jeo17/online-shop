@@ -3,10 +3,9 @@
 .login{
     width: 100vw;
     height: 100vh;
-    background-image: url("../images/d38f7e0a0c8b4e81f1426c58d678d2f5.gif");
-    background-color: #2a2a4b;
+    background-image: url("../images/xboxgif.webp");
+    background-color: #2b2b4b;
     background-repeat: no-repeat;
-    background-size: contain;
     display: flex;
     position: relative;
 }

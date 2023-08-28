@@ -57,7 +57,15 @@ const Login = () => {
         sx={{
           backgroundPositionX: {
             xs: "unset",
-            md: "550px",
+            md: "685px",
+          },
+          backgroundPositionY: {
+            xs: "unset",
+            md: "60px",
+          },
+          backgroundSize: {
+            xs: "contain",
+            md: "initial",
           },
           flexDirection: {
             xs: "column-reverse",
@@ -161,23 +169,33 @@ const Login = () => {
         </Box>
 
         <Box className="right-design">
-          <Box className="Hamo-store"  variant="body1" color="white" sx={{scale: {  xs: "0.5",   sm: "0.8", md: "1" },transform: {  xs: "translate(0px,0px)" , md: "translate(-43px,20px)" }}}>
+          <Box
+            className="Hamo-store"
+            variant="body1"
+            color="white"
+            sx={{
+              scale: { xs: "0.5", sm: "0.8", md: "1" },
+              transform: {
+                xs: "translate(0px,0px)",
+                md: "translate(-43px,20px)",
+              },
+            }}
+          >
+            <Typography variant="body1" sx={{ display: "flex" }}>
+              <Typography variant="body1" className="hamo">
+                HaM
+              </Typography>
+              <Typography variant="body1" className="hamo" color="#ffce08">
+                1
+              </Typography>
+              <Typography variant="body1" className="hamo">
+                0
+              </Typography>
+            </Typography>
 
-
-          <Typography variant="body1" sx={{display:"flex"}}>
-
-          <Typography variant="body1" className="hamo" >HaM</Typography>
-          <Typography variant="body1" className="hamo" color="#ffce08">1</Typography>
-          <Typography variant="body1" className="hamo" >0</Typography>
-
-          </Typography>
-
-
-
-
-
-          
-         <Typography variant="body1" className="store" >00StO9E</Typography> 
+            <Typography variant="body1" className="store">
+              00StO9E
+            </Typography>
           </Box>
         </Box>
       </Box>

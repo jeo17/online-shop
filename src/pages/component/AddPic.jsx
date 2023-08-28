@@ -224,8 +224,8 @@ const AddPic = () => {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              width: { xs: "90vw", sm: "inherit" },
-              ml: { xs: "5vw", sm: "inherit" },
+              width: { xs: "100vw", sm: "inherit" },
+
             }}
           >
             <Typography variant="h6" mt={2}>
@@ -340,7 +340,7 @@ const AddPic = () => {
             </List>
           </Grid>
           <Divider orientation="vertical" flexItem></Divider>
-          <Grid item xs sx={{ width: { xs: "90vw", sm: "inherit" } }}>
+          <Grid item xs sx={{ width: { xs: "100vw", sm: "inherit" } }}>
             <form className="custom__form">
               <Typography variant="h6" mt={2}>
                 Add images
