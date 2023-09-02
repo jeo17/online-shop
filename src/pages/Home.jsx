@@ -22,7 +22,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { db, storage } from "../firebase/config";
-import { ref, getDownloadURL, deleteObject } from "firebase/storage";
+import { ref, getDownloadURL, deleteObject,listAll } from "firebase/storage";
 import { doc, deleteDoc } from "firebase/firestore";
 import Skeleton from "@mui/material/Skeleton";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -87,7 +87,7 @@ const Home = (setmyMOde) => {
 
   setTimeout(() => {
     setread(true);
-  }, 2500);
+  }, 3300);
 
   // Function to delete an element by key
   function deleteElementByKey(array, key, value) {
@@ -99,6 +99,38 @@ const Home = (setmyMOde) => {
       console.log("Element not found.");
     }
   }
+
+
+  // function to delete the whole folder from firebase:
+
+  const deleteFolderAndContents = async (folderPath) => {
+    const folderRef = ref(storage, folderPath);
+  
+    try {
+      // List all items (files) in the folder
+      const items = await listAll(folderRef);
+  
+      // Delete each item (file) in the folder
+      const deletePromises = items.items.map((itemRef) => deleteObject(itemRef));
+  
+      // Wait for all delete operations to complete
+      await Promise.all(deletePromises);
+
+      // Once all items are deleted, you can now delete the folder itself
+      await deleteObject(folderRef);
+  
+      console.log('Folder and its contents deleted successfully');
+    } catch (error) {
+      console.error('Error deleting folder and contents:', error);
+    }
+  };
+
+
+
+
+
+
+
 
   function objectExistsInArray(array, object) {
     for (var i = 0; i < array.length; i++) {
@@ -120,16 +152,16 @@ const Home = (setmyMOde) => {
   }
 
   if (value) {
-    value.docs.map((item) =>
-      getDownloadURL(
+    value.docs.map(async (item) =>
+    await  getDownloadURL(
         ref(
           storage,
           `/Products/${item.data().Categorie}/${item.data().Name}/${
             item.data().img_id
-          }/1`
+          }/0`
         )
       )
-        .then((url) => {
+       .then((url) => {
           var myObject = {
             url: url,
             id: item.data().img_id,
@@ -144,9 +176,7 @@ const Home = (setmyMOde) => {
           console.log(error.message);
         })
     );
-  }
 
-  if (value) {
     itemData.sort(function (a, b) {
       return b.id - a.id;
     });
@@ -220,10 +250,6 @@ const Home = (setmyMOde) => {
                         onClick={async (eo) => {
                           handleCloseMenu();
                           if (setting.Name === "Delete") {
-                            const pictureRef = ref(
-                              storage,
-                              `/Products/${trashCate}/${trashName}/${trashID}/1`
-                            );
 
                             let trashIDnumber = Number(trashID);
 
@@ -231,27 +257,15 @@ const Home = (setmyMOde) => {
 
                             console.log("first done");
 
+                            deleteElementByKey(
+                              itemData,
+                              "id",
+                              trashIDnumber
+                            );
+
                             setread(!read);
 
-                            await deleteObject(pictureRef)
-                              .then(() => {
-                                console.log("Picture deleted successfully");
-                                deleteElementByKey(
-                                  itemData,
-                                  "id",
-                                  trashIDnumber
-                                );
-                                setTimeout(() => {
-                                  setread(!read);
-                                }, 2500);
-                                itemData.sort(function (a, b) {
-                                  return b.id - a.id;
-                                });
-                              })
-                              .catch((error) => {
-                                // An error occurred while deleting the picture
-                                console.error("Error deleting picture:", error);
-                              });
+                            deleteFolderAndContents(`/Products/${trashCate}/${trashName}/${trashID}`)
                           }
                         }}
                       >

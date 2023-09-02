@@ -45,6 +45,8 @@ const Grid = styled(MuiGrid)(({ theme }) => ({
 
 const imgFiles = [];
 const addImgHandler = () => {
+  if (imgFiles.length > 3) return;
+
   let imgInputHelper = document.getElementById("add-single-img");
   const imgInputHelperLabel = document.getElementById("add-img-label");
   const imgContainer = document.querySelector(".custom__image-container");
@@ -60,6 +62,7 @@ const addImgHandler = () => {
   };
   // Store img file
   imgFiles.push(file);
+  console.log(imgFiles);
   // Reset image input
   imgInputHelper.value = "";
   return;
@@ -182,22 +185,32 @@ const AddPic = () => {
 
                 console.log("done");
 
-                const imageref = ref(storage, `/Products/${cate}/${title}/${id}/1`);
+                imgFiles.forEach(async (item, index) => {
+                  const imageref = ref(
+                    storage,
+                    `/Products/${cate}/${title}/${id}/${index}`
+                  );
 
-                await uploadBytes(imageref, img)
-                  .then(() => {
-                    console.log("“image save successfully”");
-                  })
-                  .catch((error) => {
-                    console.log(error.message);
-                  });
+                   await uploadBytes(imageref, item)
+                    .then(() => {
+                      console.log(`img number ${index} done`);
 
-                handleClose();
-                setEmptyPrice(true);
-                setEmptyTitle(true);
-                setEmptySpc(true);
-                setimg(null);
-                window.location.reload();
+
+                      if (index+1 === imgFiles.length) {
+                        handleClose();
+                        setEmptyPrice(true);
+                        setEmptyTitle(true);
+                        setEmptySpc(true);
+                        setimg(null);
+                        window.location.reload();
+                      }
+                    })
+                    .catch((error) => {
+                      console.log(error.message);
+                    });
+                });
+
+
               }}
               disabled={
                 EmptyPrice === false &&
@@ -225,7 +238,6 @@ const AddPic = () => {
               flexDirection: "column",
               alignItems: "center",
               width: { xs: "100vw", sm: "inherit" },
-
             }}
           >
             <Typography variant="h6" mt={2}>
@@ -268,11 +280,11 @@ const AddPic = () => {
                   }}
                 >
                   <FormControl variant="standard" fullWidth>
-                    <InputLabel id="demo-simple-select-label" >
+                    <InputLabel id="demo-simple-select-label">
                       Categories
-                    </InputLabel> 
+                    </InputLabel>
                     <Select
-                    sx={{"&::before": { border: "none" }}}
+                      sx={{ "&::before": { border: "none" } }}
                       id="demo-simple-select"
                       value={cate}
                       label="Categories"
@@ -353,6 +365,7 @@ const AddPic = () => {
                   id="add-img-label"
                   htmlFor="add-single-img"
                   style={{
+                    display: imgFiles.length > 3 ? "none" : "flex",
                     border:
                       theme.palette.mode === "dark"
                         ? "solid 1px white"
