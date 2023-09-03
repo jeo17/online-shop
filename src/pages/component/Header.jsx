@@ -416,7 +416,7 @@ const Header = (setmyMOde) => {
 
                   <ListItemButton sx={{ pl: 4 }}  onClick={(eo) => {
                     Query(query( collection(db, "Products"),orderBy("img_id", "desc")))
-                    changeArray("itemData")
+                    changeArray("itemData2")
                   }}>
                     <ListItemText>
                     <Typography variant="body1" color="#228be4" sx={{fontWeight:"900"}}>ALL</Typography>
@@ -578,7 +578,7 @@ const Header = (setmyMOde) => {
 
                   <ListItemButton sx={{ pl: 4 }}  onClick={(eo) => {
                     Query(query( collection(db, "Products"),orderBy("img_id", "desc")))
-                    changeArray("itemData")
+                    changeArray("itemData2")
                   }}>
                     <ListItemText>
                     <Typography variant="body1" color="#228be4" sx={{fontWeight:"900"}}>ALL</Typography>

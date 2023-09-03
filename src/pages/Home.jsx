@@ -22,7 +22,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { db, storage } from "../firebase/config";
-import { ref, getDownloadURL, deleteObject,listAll } from "firebase/storage";
+import { ref, getDownloadURL, deleteObject, listAll } from "firebase/storage";
 import { doc, deleteDoc } from "firebase/firestore";
 import Skeleton from "@mui/material/Skeleton";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -71,13 +71,26 @@ const Home = (setmyMOde) => {
   };
 
   const [SrcBigImage, setSrcBigImage] = useState(null);
+  const [BigImgObject, setBigImgObject] = useState([]);
+  const [BigImgNbr, setBigImgNbr] = useState(1);
 
-  const handleImgClick = (eo) => {
-    setSrcBigImage(eo.target.src);
-    setTimeout(() => {
-      document.getElementById("BigImage").style.display = "flex";
-      document.getElementById("BigImage").showModal();
-    }, 700);
+
+  const handleImgClick = (id) => {
+    for (let i = 0; i < itemData2.length; i++) {
+      if (itemData2[i].id === Number(id)) {
+        setSrcBigImage(itemData2[i].urls[0]);
+
+        setBigImgObject(itemData2[i].urls)
+         
+
+        setTimeout(() => {
+          document.getElementById("BigImage").style.display = "flex";
+          document.getElementById("BigImage").showModal();
+        }, 400);
+
+        break;
+      }
+    }
   };
 
   const handleImgClose = (eo) => {
@@ -100,37 +113,31 @@ const Home = (setmyMOde) => {
     }
   }
 
-
   // function to delete the whole folder from firebase:
 
   const deleteFolderAndContents = async (folderPath) => {
     const folderRef = ref(storage, folderPath);
-  
+
     try {
       // List all items (files) in the folder
       const items = await listAll(folderRef);
-  
+
       // Delete each item (file) in the folder
-      const deletePromises = items.items.map((itemRef) => deleteObject(itemRef));
-  
+      const deletePromises = items.items.map((itemRef) =>
+        deleteObject(itemRef)
+      );
+
       // Wait for all delete operations to complete
       await Promise.all(deletePromises);
 
       // Once all items are deleted, you can now delete the folder itself
       await deleteObject(folderRef);
-  
-      console.log('Folder and its contents deleted successfully');
+
+      console.log("Folder and its contents deleted successfully");
     } catch (error) {
-      console.error('Error deleting folder and contents:', error);
+      console.error("Error deleting folder and contents:", error);
     }
   };
-
-
-
-
-
-
-
 
   function objectExistsInArray(array, object) {
     for (var i = 0; i < array.length; i++) {
@@ -152,32 +159,44 @@ const Home = (setmyMOde) => {
   }
 
   if (value) {
-    value.docs.map(async (item) =>
-    await  getDownloadURL(
-        ref(
-          storage,
-          `/Products/${item.data().Categorie}/${item.data().Name}/${
-            item.data().img_id
-          }/0`
-        )
-      )
-       .then((url) => {
-          var myObject = {
-            url: url,
-            id: item.data().img_id,
-            categorie: item.data().Categorie,
-          };
+    value.docs.forEach(async (item) => {
+      const folderRef = ref(
+        storage,
+        `/Products/${item.data().Categorie}/${item.data().Name}/${
+          item.data().img_id
+        }`
+      );
 
-          if (objectExistsInArray(itemData, myObject) === false) {
-            itemData = itemData.concat(myObject);
-          }
-        })
-        .catch((error) => {
-          console.log(error.message);
-        })
-    );
+      try {
+        // List all items (files) in the folder
+        const items = await listAll(folderRef);
 
-    itemData.sort(function (a, b) {
+        // Create an array to store download URLs
+        const downloadURLs = [];
+
+        // Iterate through each item (file) and get its download URL
+        for (const itemRef of items.items) {
+          const url = await getDownloadURL(itemRef);
+          downloadURLs.push(url);
+        }
+
+        var myObject = {
+          urls: downloadURLs,
+          id: item.data().img_id,
+          categorie: item.data().Categorie,
+        };
+
+        if (objectExistsInArray(itemData2, myObject) === false) {
+          itemData2 = itemData2.concat(myObject);
+        }
+
+        // Now you can use the download URLs for further processing, such as displaying or saving the images.
+      } catch (error) {
+        console.error("Error downloading folder contents:", error);
+      }
+    });
+
+    itemData2.sort(function (a, b) {
       return b.id - a.id;
     });
   }
@@ -185,9 +204,11 @@ const Home = (setmyMOde) => {
   if (user) {
     if (user.uid === "1z7kIqBfyah5oLIh6KxXNtpMSrw2") {
       if (value) {
-        const XboxItems = itemData.filter((item) => item.categorie === "Xbox");
-        const PlayItems = itemData.filter((item) => item.categorie === "Playstation");
-        const PspItems = itemData.filter((item) => item.categorie === "Psp");
+        const XboxItems = itemData2.filter((item) => item.categorie === "Xbox");
+        const PlayItems = itemData2.filter(
+          (item) => item.categorie === "Playstation"
+        );
+        const PspItems = itemData2.filter((item) => item.categorie === "Psp");
         return (
           <div>
             <Header {...{ setmyMOde }} />
@@ -250,22 +271,19 @@ const Home = (setmyMOde) => {
                         onClick={async (eo) => {
                           handleCloseMenu();
                           if (setting.Name === "Delete") {
-
                             let trashIDnumber = Number(trashID);
 
                             await deleteDoc(doc(db, "Products", trashID));
 
                             console.log("first done");
 
-                            deleteElementByKey(
-                              itemData,
-                              "id",
-                              trashIDnumber
-                            );
+                            deleteElementByKey(itemData2, "id", trashIDnumber);
 
                             setread(!read);
 
-                            deleteFolderAndContents(`/Products/${trashCate}/${trashName}/${trashID}`)
+                            deleteFolderAndContents(
+                              `/Products/${trashCate}/${trashName}/${trashID}`
+                            );
                           }
                         }}
                       >
@@ -293,49 +311,50 @@ const Home = (setmyMOde) => {
                     />
                   ) : (
                     <img
+                      id={item.data().img_id}
                       className="small-img"
                       src={
-                        arrayItem === "itemData"
-                          ? itemData[index] !== undefined
-                            ? `${itemData[index].url}?w=248&fit=crop&auto=format`
+                        arrayItem === "itemData2"
+                          ? itemData2[index] !== undefined
+                            ? `${itemData2[index].urls[0]}?w=248&fit=crop&auto=format`
                             : null
                           : arrayItem === "XboxItems"
                           ? XboxItems[index] !== undefined
-                            ? `${XboxItems[index].url}?w=248&fit=crop&auto=format`
+                            ? `${XboxItems[index].urls[0]}?w=248&fit=crop&auto=format`
                             : null
                           : arrayItem === "PlayItems"
                           ? PlayItems[index] !== undefined
-                            ? `${PlayItems[index].url}?w=248&fit=crop&auto=format`
+                            ? `${PlayItems[index].urls[0]}?w=248&fit=crop&auto=format`
                             : null
                           : arrayItem === "PspItems"
                           ? PspItems[index] !== undefined
-                            ? `${PspItems[index].url}?w=248&fit=crop&auto=format`
+                            ? `${PspItems[index].urls[0]}?w=248&fit=crop&auto=format`
                             : null
                           : null
                       }
                       srcSet={
-                        arrayItem === "itemData"
-                          ? itemData[index] !== undefined
-                            ? `${itemData[index].url}?w=248&fit=crop&auto=format`
+                        arrayItem === "itemData2"
+                          ? itemData2[index] !== undefined
+                            ? `${itemData2[index].urls[0]}?w=248&fit=crop&auto=format`
                             : null
                           : arrayItem === "XboxItems"
                           ? XboxItems[index] !== undefined
-                            ? `${XboxItems[index].url}?w=248&fit=crop&auto=format`
+                            ? `${XboxItems[index].urls[0]}?w=248&fit=crop&auto=format`
                             : null
                           : arrayItem === "PlayItems"
                           ? PlayItems[index] !== undefined
-                            ? `${PlayItems[index].url}?w=248&fit=crop&auto=format`
+                            ? `${PlayItems[index].urls[0]}?w=248&fit=crop&auto=format`
                             : null
                           : arrayItem === "PspItems"
                           ? PspItems[index] !== undefined
-                            ? `${PspItems[index].url}?w=248&fit=crop&auto=format`
+                            ? `${PspItems[index].urls[0]}?w=248&fit=crop&auto=format`
                             : null
                           : null
                       }
                       alt={item.data().Name}
                       loading="lazy"
                       onClick={(eo) => {
-                        handleImgClick(eo);
+                        handleImgClick(eo.target.id);
                       }}
                     />
                   )}
@@ -399,6 +418,7 @@ const Home = (setmyMOde) => {
                 onKeyDown={(eo) => {
                   if (eo.key === "Escape") {
                     handleImgClose();
+                    setBigImgNbr(1)
                   }
                 }}
                 onClick={(eo) => {
@@ -408,6 +428,7 @@ const Home = (setmyMOde) => {
                     "dialog-big-img MuiBox-root css-34vu7h"
                   ) {
                     handleImgClose();
+                    setBigImgNbr(1)
                   }
                 }}
               >
@@ -415,9 +436,22 @@ const Home = (setmyMOde) => {
 
                 <Box className="bottom-dialog-bar">
                   <Box className="dialog-bar-cont" sx={{ fontSize: "20px" }}>
-                    <ArrowBackIosNewIcon className="dialog-img-nbr" />
-                    1/1
-                    <ArrowForwardIosIcon className="dialog-img-nbr" />
+                  <IconButton  disabled={BigImgNbr === 1 ? true : false } >
+                    <ArrowBackIosNewIcon className="dialog-img-nbr" onClick={(eo) => {
+                      setSrcBigImage(BigImgObject[BigImgNbr-2]);
+                      setBigImgNbr(BigImgNbr-1)
+                     
+                    }} />
+                    </IconButton>
+        
+                    {`${BigImgNbr}/${BigImgObject.length}`}
+                    <IconButton disabled={BigImgNbr === BigImgObject.length ? true : false } >
+                    <ArrowForwardIosIcon className="dialog-img-nbr" onClick={(eo) => {
+                      setSrcBigImage(BigImgObject[BigImgNbr]);
+                      setBigImgNbr(BigImgNbr+1)
+                     
+                    }} />
+                    </IconButton>
                   </Box>
                 </Box>
               </Box>
@@ -427,9 +461,11 @@ const Home = (setmyMOde) => {
       }
     } else {
       if (value) {
-        const XboxItems = itemData.filter((item) => item.categorie === "Xbox");
-        const PlayItems = itemData.filter((item) => item.categorie === "Playstation");
-        const PspItems = itemData.filter((item) => item.categorie === "Psp");
+        const XboxItems = itemData2.filter((item) => item.categorie === "Xbox");
+        const PlayItems = itemData2.filter(
+          (item) => item.categorie === "Playstation"
+        );
+        const PspItems = itemData2.filter((item) => item.categorie === "Psp");
         return (
           <div>
             <Header {...{ setmyMOde }} />
@@ -484,49 +520,50 @@ const Home = (setmyMOde) => {
                     />
                   ) : (
                     <img
+                      id={item.data().img_id}
                       className="small-img"
                       src={
-                        arrayItem === "itemData"
-                          ? itemData[index] !== undefined
-                            ? `${itemData[index].url}?w=248&fit=crop&auto=format`
+                        arrayItem === "itemData2"
+                          ? itemData2[index] !== undefined
+                            ? `${itemData2[index].urls[0]}?w=248&fit=crop&auto=format`
                             : null
                           : arrayItem === "XboxItems"
                           ? XboxItems[index] !== undefined
-                            ? `${XboxItems[index].url}?w=248&fit=crop&auto=format`
+                            ? `${XboxItems[index].urls[0]}?w=248&fit=crop&auto=format`
                             : null
                           : arrayItem === "PlayItems"
                           ? PlayItems[index] !== undefined
-                            ? `${PlayItems[index].url}?w=248&fit=crop&auto=format`
+                            ? `${PlayItems[index].urls[0]}?w=248&fit=crop&auto=format`
                             : null
                           : arrayItem === "PspItems"
                           ? PspItems[index] !== undefined
-                            ? `${PspItems[index].url}?w=248&fit=crop&auto=format`
+                            ? `${PspItems[index].urls[0]}?w=248&fit=crop&auto=format`
                             : null
                           : null
                       }
                       srcSet={
-                        arrayItem === "itemData"
-                          ? itemData[index] !== undefined
-                            ? `${itemData[index].url}?w=248&fit=crop&auto=format`
+                        arrayItem === "itemData2"
+                          ? itemData2[index] !== undefined
+                            ? `${itemData2[index].urls[0]}?w=248&fit=crop&auto=format`
                             : null
                           : arrayItem === "XboxItems"
                           ? XboxItems[index] !== undefined
-                            ? `${XboxItems[index].url}?w=248&fit=crop&auto=format`
+                            ? `${XboxItems[index].urls[0]}?w=248&fit=crop&auto=format`
                             : null
                           : arrayItem === "PlayItems"
                           ? PlayItems[index] !== undefined
-                            ? `${PlayItems[index].url}?w=248&fit=crop&auto=format`
+                            ? `${PlayItems[index].urls[0]}?w=248&fit=crop&auto=format`
                             : null
                           : arrayItem === "PspItems"
                           ? PspItems[index] !== undefined
-                            ? `${PspItems[index].url}?w=248&fit=crop&auto=format`
+                            ? `${PspItems[index].urls[0]}?w=248&fit=crop&auto=format`
                             : null
                           : null
                       }
                       alt={item.data().Name}
                       loading="lazy"
                       onClick={(eo) => {
-                        handleImgClick(eo);
+                        handleImgClick(eo.target.id);
                       }}
                       sx={{ height: "100% !important" }}
                     />
@@ -590,6 +627,7 @@ const Home = (setmyMOde) => {
                 onKeyDown={(eo) => {
                   if (eo.key === "Escape") {
                     handleImgClose();
+                    setBigImgNbr(1)
                   }
                 }}
                 onClick={(eo) => {
@@ -599,6 +637,7 @@ const Home = (setmyMOde) => {
                     "dialog-big-img MuiBox-root css-34vu7h"
                   ) {
                     handleImgClose();
+                    setBigImgNbr(1)
                   }
                 }}
               >
@@ -606,9 +645,22 @@ const Home = (setmyMOde) => {
 
                 <Box className="bottom-dialog-bar">
                   <Box className="dialog-bar-cont" sx={{ fontSize: "20px" }}>
-                    <ArrowBackIosNewIcon className="dialog-img-nbr" />
-                    1/1
-                    <ArrowForwardIosIcon className="dialog-img-nbr" />
+                  <IconButton  disabled={BigImgNbr === 1 ? true : false } >
+                    <ArrowBackIosNewIcon className="dialog-img-nbr" onClick={(eo) => {
+                      setSrcBigImage(BigImgObject[BigImgNbr-2]);
+                      setBigImgNbr(BigImgNbr-1)
+                     
+                    }} />
+                    </IconButton>
+        
+                    {`${BigImgNbr}/${BigImgObject.length}`}
+                    <IconButton disabled={BigImgNbr === BigImgObject.length ? true : false } >
+                    <ArrowForwardIosIcon className="dialog-img-nbr" onClick={(eo) => {
+                      setSrcBigImage(BigImgObject[BigImgNbr]);
+                      setBigImgNbr(BigImgNbr+1)
+                     
+                    }} />
+                    </IconButton>
                   </Box>
                 </Box>
               </Box>
@@ -619,6 +671,6 @@ const Home = (setmyMOde) => {
     }
   }
 };
-let itemData = [];
+let itemData2 = [];
 
 export default Home;

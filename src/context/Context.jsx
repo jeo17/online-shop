@@ -11,7 +11,7 @@ const initialData = {
     collection(db, "Products"),
     orderBy("img_id", "desc")
   ),
-  arrayItem: "itemData"
+  arrayItem: "itemData2"
 };
 const reducer = (firstState, action) => {
   switch (action.type) {

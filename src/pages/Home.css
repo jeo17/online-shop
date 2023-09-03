@@ -214,14 +214,12 @@ dialog::backdrop{
 }
 
 .dialog-img-nbr{
-  height: 36px;
-  width: 36px;
+  height: 36px !important;
+  width: 36px !important;
   font-size: 24px;
   padding: 6px;
 }
 .dialog-img-nbr:hover{
-  background-color: rgba(234 ,234, 234 ,0.3);
-  border-radius: 50%;
   left: 0;
   cursor: pointer;
  }
