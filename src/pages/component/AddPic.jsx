@@ -28,6 +28,9 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import LinearProgress, {
+  linearProgressClasses,
+} from "@mui/material/LinearProgress";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -38,6 +41,26 @@ const Grid = styled(MuiGrid)(({ theme }) => ({
   ...theme.typography.body2,
   '& [role="separator"]': {
     margin: theme.spacing(0, 2),
+  },
+}));
+
+/********************************************************************** */
+
+const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
+  width: "50%",
+  marginLeft: "auto",
+  marginRight: "auto",
+  marginTop: "1.5rem",
+  marginBottom: "1.5rem",
+  height: 10,
+  borderRadius: 5,
+  [`&.${linearProgressClasses.colorPrimary}`]: {
+    backgroundColor:
+      theme.palette.grey[theme.palette.mode === "light" ? 200 : 800],
+  },
+  [`& .${linearProgressClasses.bar}`]: {
+    borderRadius: 5,
+    backgroundColor: theme.palette.mode === "light" ? "#1a90ff" : "#308fe8",
   },
 }));
 
@@ -108,7 +131,10 @@ const AddPic = () => {
   let [img, setimg] = useState(null);
   const [save, setsave] = useState("Save");
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+
+  const [ShowProgress, setShowProgress] = useState(0);
+  const [ShowProgressBar, setShowProgressBar] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -183,20 +209,22 @@ const AddPic = () => {
                   img_id: id,
                 });
 
-                console.log("done");
-
+                setShowProgressBar(true)
+          
+                let cpt = 0;
                 imgFiles.forEach(async (item, index) => {
                   const imageref = ref(
                     storage,
                     `/Products/${cate}/${title}/${id}/${index}`
                   );
 
-                   await uploadBytes(imageref, item)
+                  await uploadBytes(imageref, item)
                     .then(() => {
                       console.log(`img number ${index} done`);
+                      ++cpt;
+                      setShowProgress((100*cpt) /imgFiles.length) 
 
-
-                      if (index+1 === imgFiles.length) {
+                      if (index + 1 === imgFiles.length) {
                         handleClose();
                         setEmptyPrice(true);
                         setEmptyTitle(true);
@@ -209,8 +237,6 @@ const AddPic = () => {
                       console.log(error.message);
                     });
                 });
-
-
               }}
               disabled={
                 EmptyPrice === false &&
@@ -394,6 +420,12 @@ const AddPic = () => {
               />
               <br />
             </form>
+
+            <Box sx={{ flexGrow: 1 }}>
+              {ShowProgressBar && (
+                <BorderLinearProgress variant="determinate" value={ShowProgress} />
+              )}
+            </Box>
           </Grid>
         </Grid>
       </Dialog>

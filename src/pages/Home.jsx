@@ -74,14 +74,12 @@ const Home = (setmyMOde) => {
   const [BigImgObject, setBigImgObject] = useState([]);
   const [BigImgNbr, setBigImgNbr] = useState(1);
 
-
   const handleImgClick = (id) => {
     for (let i = 0; i < itemData2.length; i++) {
       if (itemData2[i].id === Number(id)) {
         setSrcBigImage(itemData2[i].urls[0]);
 
-        setBigImgObject(itemData2[i].urls)
-         
+        setBigImgObject(itemData2[i].urls);
 
         setTimeout(() => {
           document.getElementById("BigImage").style.display = "flex";
@@ -93,7 +91,7 @@ const Home = (setmyMOde) => {
     }
   };
 
-  const handleImgClose = (eo) => {
+  const handleImgClose = () => {
     document.getElementById("BigImage").style.display = "none";
     document.getElementById("BigImage").close();
   };
@@ -155,7 +153,25 @@ const Home = (setmyMOde) => {
   }, [value]);
 
   if (loading) {
-    return <Typography component={"h2"}> Please wait</Typography>;
+    return (
+      <Box className="loader-container">
+        <div className="loader">
+          <svg viewBox="0 0 80 80">
+            <circle id="test" cx={40} cy={40} r={32} />
+          </svg>
+        </div>
+        <div className="loader triangle">
+          <svg viewBox="0 0 86 80">
+            <polygon points="43 8 79 72 7 72" />
+          </svg>
+        </div>
+        <div className="loader">
+          <svg viewBox="0 0 80 80">
+            <rect x={8} y={8} width={64} height={64} />
+          </svg>
+        </div>
+      </Box>
+    );
   }
 
   if (value) {
@@ -418,17 +434,16 @@ const Home = (setmyMOde) => {
                 onKeyDown={(eo) => {
                   if (eo.key === "Escape") {
                     handleImgClose();
-                    setBigImgNbr(1)
+                    setBigImgNbr(1);
                   }
                 }}
                 onClick={(eo) => {
-                  console.log(eo.target.className);
                   if (
                     eo.target.className ===
                     "dialog-big-img MuiBox-root css-34vu7h"
                   ) {
                     handleImgClose();
-                    setBigImgNbr(1)
+                    setBigImgNbr(1);
                   }
                 }}
               >
@@ -436,21 +451,29 @@ const Home = (setmyMOde) => {
 
                 <Box className="bottom-dialog-bar">
                   <Box className="dialog-bar-cont" sx={{ fontSize: "20px" }}>
-                  <IconButton  disabled={BigImgNbr === 1 ? true : false } >
-                    <ArrowBackIosNewIcon className="dialog-img-nbr" onClick={(eo) => {
-                      setSrcBigImage(BigImgObject[BigImgNbr-2]);
-                      setBigImgNbr(BigImgNbr-1)
-                     
-                    }} />
+                    <IconButton disabled={BigImgNbr === 1 ? true : false}>
+                      <ArrowBackIosNewIcon
+                        className="dialog-img-nbr"
+                        onClick={(eo) => {
+                          setSrcBigImage(BigImgObject[BigImgNbr - 2]);
+                          setBigImgNbr(BigImgNbr - 1);
+                        }}
+                      />
                     </IconButton>
-        
+
                     {`${BigImgNbr}/${BigImgObject.length}`}
-                    <IconButton disabled={BigImgNbr === BigImgObject.length ? true : false } >
-                    <ArrowForwardIosIcon className="dialog-img-nbr" onClick={(eo) => {
-                      setSrcBigImage(BigImgObject[BigImgNbr]);
-                      setBigImgNbr(BigImgNbr+1)
-                     
-                    }} />
+                    <IconButton
+                      disabled={
+                        BigImgNbr === BigImgObject.length ? true : false
+                      }
+                    >
+                      <ArrowForwardIosIcon
+                        className="dialog-img-nbr"
+                        onClick={(eo) => {
+                          setSrcBigImage(BigImgObject[BigImgNbr]);
+                          setBigImgNbr(BigImgNbr + 1);
+                        }}
+                      />
                     </IconButton>
                   </Box>
                 </Box>
@@ -627,17 +650,16 @@ const Home = (setmyMOde) => {
                 onKeyDown={(eo) => {
                   if (eo.key === "Escape") {
                     handleImgClose();
-                    setBigImgNbr(1)
+                    setBigImgNbr(1);
                   }
                 }}
                 onClick={(eo) => {
-                  console.log(eo.target.className);
                   if (
                     eo.target.className ===
                     "dialog-big-img MuiBox-root css-34vu7h"
                   ) {
                     handleImgClose();
-                    setBigImgNbr(1)
+                    setBigImgNbr(1);
                   }
                 }}
               >
@@ -645,21 +667,33 @@ const Home = (setmyMOde) => {
 
                 <Box className="bottom-dialog-bar">
                   <Box className="dialog-bar-cont" sx={{ fontSize: "20px" }}>
-                  <IconButton  disabled={BigImgNbr === 1 ? true : false } >
-                    <ArrowBackIosNewIcon className="dialog-img-nbr" onClick={(eo) => {
-                      setSrcBigImage(BigImgObject[BigImgNbr-2]);
-                      setBigImgNbr(BigImgNbr-1)
-                     
-                    }} />
+                    <IconButton
+                      disabled={BigImgNbr === 1 ? true : false}
+                      onClick={(eo) => {
+                        setSrcBigImage(BigImgObject[BigImgNbr - 2]);
+                        setBigImgNbr(BigImgNbr - 1);
+                      }}
+                    >
+                      <ArrowBackIosNewIcon
+                        className="dialog-img-nbr"
+                        color="#fff"
+                      />
                     </IconButton>
-        
+
                     {`${BigImgNbr}/${BigImgObject.length}`}
-                    <IconButton disabled={BigImgNbr === BigImgObject.length ? true : false } >
-                    <ArrowForwardIosIcon className="dialog-img-nbr" onClick={(eo) => {
-                      setSrcBigImage(BigImgObject[BigImgNbr]);
-                      setBigImgNbr(BigImgNbr+1)
-                     
-                    }} />
+                    <IconButton
+                      disabled={
+                        BigImgNbr === BigImgObject.length ? true : false
+                      }
+                      onClick={(eo) => {
+                        setSrcBigImage(BigImgObject[BigImgNbr]);
+                        setBigImgNbr(BigImgNbr + 1);
+                      }}
+                    >
+                      <ArrowForwardIosIcon
+                        className="dialog-img-nbr"
+                        color="#fff"
+                      />
                     </IconButton>
                   </Box>
                 </Box>

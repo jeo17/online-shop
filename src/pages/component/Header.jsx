@@ -25,7 +25,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AddPic from "./AddPic";
 import { signOut } from "firebase/auth";
-import { auth, db,storage } from "../../firebase/config";
+import { auth, db, storage } from "../../firebase/config";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -40,14 +40,10 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import { styled } from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
 import { useTheme } from "@mui/material";
-import {useContext } from "react";
+import { useContext } from "react";
 import Context from "../../context/Context";
 import { useCollection } from "react-firebase-hooks/firestore";
-import { collection, query, where,orderBy } from "firebase/firestore";
-import { ref, getDownloadURL } from "firebase/storage";
-
-
-
+import { collection, query, where, orderBy } from "firebase/firestore";
 
 const pages = [
   {
@@ -101,7 +97,7 @@ function SimpleDialog(props) {
             className="facebook"
             href="https://www.facebook.com/hamo.milano"
             target="_blank"
-            rel="noopener noreferrer" 
+            rel="noopener noreferrer"
           >
             <span></span>
             <span></span>
@@ -123,7 +119,7 @@ function SimpleDialog(props) {
           <a
             className="instagram"
             target="_blank"
-            rel="noopener noreferrer" 
+            rel="noopener noreferrer"
             href="https://www.instagram.com/milano.hamo/?igshid=MzRlODBiNWFlZA%3D%3D&fbclid=IwAR1XjaUP-fDPm7-EzjSKkGxG4Vij63BqgjHDe2GHcOfxtzV_9zwiuDOT6lo"
           >
             <span></span>
@@ -190,55 +186,8 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-const Header = (setmyMOde) => {  
-  
-  const {Query,changeArray} = useContext(Context);
-
-  const [value] = useCollection( query( collection(db, "Products"), orderBy("img_id", "desc")) )
-
-
-
-  function objectExistsInArray(array, object) {
-    for (var i = 0; i < array.length; i++) {
-      if (JSON.stringify(array[i]) === JSON.stringify(object)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-
-
-  if (value) {
-    value.docs.map((item) =>
-      getDownloadURL(
-        ref(storage, `/Products/${item.data().Categorie}/${item.data().Name}/${item.data().img_id}/1`)
-      )
-        .then((url) => {
-          var myObject = {
-            url: url,
-            id: item.data().img_id,
-            categorie: item.data().Categorie,
-          };
-
-          if (objectExistsInArray(itemData2, myObject) === false) {
-            itemData2 = itemData2.concat(myObject);
-          }
-        })
-        .catch((error) => {
-          console.log(error.message);
-        })
-    );
-  }
-
-  if (value) {
-    itemData2.sort(function (a, b) {
-      return b.id - a.id;
-    });
-  }
-
-
-
+const Header = (setmyMOde) => {
+  const { Query, changeArray } = useContext(Context);
 
   const theme = useTheme();
   const [user] = useAuthState(auth);
@@ -353,10 +302,18 @@ const Header = (setmyMOde) => {
               </MenuItem>
               <Collapse in={openCate} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                  <ListItemButton sx={{ pl: 4 }} onClick={(eo) => {
-                    Query(query(collection(db, "Products"), where( "Categorie", "==", "Xbox")))
-                    changeArray("XboxItems")
-                  }}>
+                  <ListItemButton
+                    sx={{ pl: 4 }}
+                    onClick={(eo) => {
+                      Query(
+                        query(
+                          collection(db, "Products"),
+                          where("Categorie", "==", "Xbox")
+                        )
+                      );
+                      changeArray("XboxItems");
+                    }}
+                  >
                     <ListItemIcon>
                       <SvgIcon>
                         <svg
@@ -372,11 +329,18 @@ const Header = (setmyMOde) => {
                     </ListItemIcon>
                     <ListItemText primary="Xbox" />
                   </ListItemButton>
-                  <ListItemButton sx={{ pl: 4 }} onClick={(eo) => {
-                    Query(query(collection(db, "Products"), where( "Categorie", "==", "Playstation")))
-                    changeArray("PlayItems")
-
-                  }}>
+                  <ListItemButton
+                    sx={{ pl: 4 }}
+                    onClick={(eo) => {
+                      Query(
+                        query(
+                          collection(db, "Products"),
+                          where("Categorie", "==", "Playstation")
+                        )
+                      );
+                      changeArray("PlayItems");
+                    }}
+                  >
                     <ListItemIcon>
                       <SvgIcon>
                         <svg
@@ -392,10 +356,18 @@ const Header = (setmyMOde) => {
                     </ListItemIcon>
                     <ListItemText primary="PlayStation" />
                   </ListItemButton>
-                  <ListItemButton sx={{ pl: 4 }}  onClick={(eo) => {
-                    Query(query(collection(db, "Products"), where( "Categorie", "==", "Psp")))
-                    changeArray("PspItems")
-                  }}>
+                  <ListItemButton
+                    sx={{ pl: 4 }}
+                    onClick={(eo) => {
+                      Query(
+                        query(
+                          collection(db, "Products"),
+                          where("Categorie", "==", "Psp")
+                        )
+                      );
+                      changeArray("PspItems");
+                    }}
+                  >
                     <ListItemIcon>
                       <SvgIcon>
                         <svg
@@ -414,12 +386,26 @@ const Header = (setmyMOde) => {
                     <ListItemText primary="PSP" />
                   </ListItemButton>
 
-                  <ListItemButton sx={{ pl: 4 }}  onClick={(eo) => {
-                    Query(query( collection(db, "Products"),orderBy("img_id", "desc")))
-                    changeArray("itemData2")
-                  }}>
+                  <ListItemButton
+                    sx={{ pl: 4 }}
+                    onClick={(eo) => {
+                      Query(
+                        query(
+                          collection(db, "Products"),
+                          orderBy("img_id", "desc")
+                        )
+                      );
+                      changeArray("itemData2");
+                    }}
+                  >
                     <ListItemText>
-                    <Typography variant="body1" color="#228be4" sx={{fontWeight:"900"}}>ALL</Typography>
+                      <Typography
+                        variant="body1"
+                        color="#228be4"
+                        sx={{ fontWeight: "900" }}
+                      >
+                        ALL
+                      </Typography>
                     </ListItemText>
                   </ListItemButton>
                 </List>
@@ -496,7 +482,12 @@ const Header = (setmyMOde) => {
                 <ListItemText primary="Categories" />
                 {open ? <ExpandLess /> : <ExpandMore />}
               </ListItemButton>
-              <Collapse in={open} timeout="auto" unmountOnExit sx={{zIndex:"8"}}>
+              <Collapse
+                in={open}
+                timeout="auto"
+                unmountOnExit
+                sx={{ zIndex: "8" }}
+              >
                 <List
                   id="categories"
                   component="div"
@@ -513,11 +504,18 @@ const Header = (setmyMOde) => {
                     setOpen(false);
                   }}
                 >
-
-                  <ListItemButton sx={{ pl: 4 }}  onClick={(eo) => {
-                    Query(query(collection(db, "Products"), where( "Categorie", "==", "Xbox")))
-                    changeArray("XboxItems")
-                  }}>
+                  <ListItemButton
+                    sx={{ pl: 4 }}
+                    onClick={(eo) => {
+                      Query(
+                        query(
+                          collection(db, "Products"),
+                          where("Categorie", "==", "Xbox")
+                        )
+                      );
+                      changeArray("XboxItems");
+                    }}
+                  >
                     <ListItemText>
                       <SvgIcon>
                         <svg
@@ -532,11 +530,18 @@ const Header = (setmyMOde) => {
                       </SvgIcon>
                     </ListItemText>
                   </ListItemButton>
-                  <ListItemButton sx={{ pl: 4 }}   onClick={(eo) => {
-                    Query(query(collection(db, "Products"), where( "Categorie", "==", "Playstation")))
-                    changeArray("PlayItems")
-
-                  }}>
+                  <ListItemButton
+                    sx={{ pl: 4 }}
+                    onClick={(eo) => {
+                      Query(
+                        query(
+                          collection(db, "Products"),
+                          where("Categorie", "==", "Playstation")
+                        )
+                      );
+                      changeArray("PlayItems");
+                    }}
+                  >
                     <ListItemText>
                       <SvgIcon>
                         <svg
@@ -551,10 +556,18 @@ const Header = (setmyMOde) => {
                       </SvgIcon>
                     </ListItemText>
                   </ListItemButton>
-                  <ListItemButton sx={{ pl: 4 }}   onClick={(eo) => {
-                    Query(query(collection(db, "Products"), where( "Categorie", "==", "Psp")))
-                    changeArray("PspItems")
-                  }}>
+                  <ListItemButton
+                    sx={{ pl: 4 }}
+                    onClick={(eo) => {
+                      Query(
+                        query(
+                          collection(db, "Products"),
+                          where("Categorie", "==", "Psp")
+                        )
+                      );
+                      changeArray("PspItems");
+                    }}
+                  >
                     <ListItemText>
                       <SvgIcon>
                         <svg
@@ -572,32 +585,36 @@ const Header = (setmyMOde) => {
                     </ListItemText>
                   </ListItemButton>
 
-
-
-
-
-                  <ListItemButton sx={{ pl: 4 }}  onClick={(eo) => {
-                    Query(query( collection(db, "Products"),orderBy("img_id", "desc")))
-                    changeArray("itemData2")
-                  }}>
+                  <ListItemButton
+                    sx={{ pl: 4 }}
+                    onClick={(eo) => {
+                      Query(
+                        query(
+                          collection(db, "Products"),
+                          orderBy("img_id", "desc")
+                        )
+                      );
+                      changeArray("itemData2");
+                    }}
+                  >
                     <ListItemText>
-                    <Typography variant="body1" color="#228be4" sx={{fontWeight:"900"}}>ALL</Typography>
+                      <Typography
+                        variant="body1"
+                        color="#228be4"
+                        sx={{ fontWeight: "900" }}
+                      >
+                        ALL
+                      </Typography>
                     </ListItemText>
                   </ListItemButton>
-
-
-
-
                 </List>
               </Collapse>
             </Button>
 
             {user.uid === "1z7kIqBfyah5oLIh6KxXNtpMSrw2" && (
-
-                <ListItemButton sx={{flexGrow :"0"}}>
-                  <ListItemText primary={<AddPic />} />
-                </ListItemButton>
-   
+              <ListItemButton sx={{ flexGrow: "0" }}>
+                <ListItemText primary={<AddPic />} />
+              </ListItemButton>
             )}
           </Box>
 
@@ -727,5 +744,4 @@ const Header = (setmyMOde) => {
   );
 };
 
-let itemData2 = [];
 export default Header;
